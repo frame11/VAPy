@@ -34,8 +34,8 @@ class VAPy:
         def wrapper(self, inp):
             try:
                 return(func(self, inp))
-            except TypeError:
-                return False
+            except KeyError:
+                return {}
         return wrapper
 
     # SUBVERSE INFO FUNCTIONS
@@ -45,7 +45,7 @@ class VAPy:
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
-        return resp['data'] if resp['success'] == True else False
+        return resp['data'] if resp['success'] == True else {}
 
     @validate_input
     def get_subverse_creation_date(self, subverse):
@@ -70,14 +70,14 @@ class VAPy:
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
-        return resp['data'] if resp['success'] == True else False
+        return resp['data'] if resp['success'] == True else {}
 
-    def get_subverse_submissions(self, subverse):
+    def submission_dicts_from_subverse(self, subverse):
         url = API_URL + 'v/{}'.format(subverse)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
-        return resp
+        return resp['data'] if resp['success'] == True else []
 
     @validate_input
     def get_submission_type(self, submission_dict):
@@ -85,8 +85,11 @@ class VAPy:
 
     @validate_input
     def get_submission_content(self, submission_dict):
-        return submission_dict[self.get_submission_type(submission_dict)]
-
+        if submission_dict != {}:
+            return submission_dict[self.get_submission_type(submission_dict)]
+        else:
+            return {}
+    
     @validate_input
     def get_submission_subverse(self, submission_dict):
         return submission_dict['subverse']
@@ -105,8 +108,11 @@ class VAPy:
 
     @validate_input
     def get_submission_score(self, submission_dict):
-        up, down = self.get_submission_scores(submission_dict)
-        return up - down
+        if submission_dict != {}:
+            up, down = self.get_submission_scores(submission_dict)
+            return up - down
+        else:
+            return {}
 
     @validate_input
     def get_submission_date(self, submission_dict):
