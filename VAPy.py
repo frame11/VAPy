@@ -51,7 +51,7 @@ class VAPy:
 
     # SUBMISSION GETTERS
 
-    def submission_by_id(self, submission_id):
+    def submission_dict_from_id(self, submission_id):
         url = API_URL + 'submissions/{}'.format(submission_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
@@ -100,5 +100,5 @@ class VAPy:
         return True if self.get_submission_type == 'text' else False
 
     def submission_is_link(self, submission_dict):
-        return True is self.get_submission_type == 'link' else False
+        return True if self.get_submission_type == 'link' else False
 
