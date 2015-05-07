@@ -1,2 +1,2 @@
 # VAPy
-The Voat API Python3 wrapper
+The Voat API wrapper for Python3
