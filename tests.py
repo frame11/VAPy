@@ -44,16 +44,70 @@ class VAPyTests(unittest.TestCase):
         self.assertFalse(self.vapy.get_subverse_sidebar('yoloswagbotfactorystar'))
 
     def test_get_text_submission_type(self):
-        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(209)), 'text')
+        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(209)), 'formattedContent')
         
     def test_get_link_submission_type(self):
-        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(211)), 'link')
+        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(211)), 'url')
         
     def test_get_invalid_submission_type(self):
         self.assertFalse(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(99999999)))
 
-    def test_get_test_submission_content(self):
+    def test_get_text_submission_content(self):
         self.assertEqual(self.vapy.get_submission_content(self.vapy.submission_dict_from_id(209)), '<p>testicular</p>\n') 
+
+    def test_get_url_submission_content(self):
+        self.assertEqual(self.vapy.get_submission_content(self.vapy.submission_dict_from_id(211)), 'https://github.com/frame11/VAPy')
+
+    def test_get_invalid_submission_content(self):
+        self.assertFalse(self.vapy.get_submission_content(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_subverse(self):
+        self.assertEqual(self.vapy.get_submission_subverse(self.vapy.submission_dict_from_id(209)), 'frame11')
+
+    def test_get_invalid_submission_subverse(self):
+        self.assertFalse(self.vapy.get_submission_subverse(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_title(self):
+        self.assertEqual(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(209)), 'testicular')
+        
+    def test_get_invalid_submission_title(self):
+        self.assertFalse(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_author(self):
+        self.assertEqual(self.vapy.get_submission_author(self.vapy.submission_dict_from_id(209)), 'frame11')
+    
+    def test_get_invalid_submission_author(self):
+        self.assertFalse(self.vapy.get_submission_author(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_scores(self):
+        self.assertEqual(self.vapy.get_submission_scores(self.vapy.submission_dict_from_id(213)), (3, 1))
+
+    def test_get_invalid_submission_scores(self):
+        self.assertFalse(self.vapy.get_submission_scores(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_score(self):
+        self.assertEqual(self.vapy.get_submission_score(self.vapy.submission_dict_from_id(213)), 2)
+    
+    def test_get_invalid_submission_score(self):
+        self.assertFalse(self.vapy.get_submission_score(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_date(self):
+        self.assertEqual(self.vapy.get_submission_date(self.vapy.submission_dict_from_id(209)), '2015-05-07T08:41:44.067')
+
+    def test_get_invalid_submission_date(self):
+        self.assertFalse(self.vapy.get_submission_date(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_submission_rank(self):
+        self.assertEqual(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(213)), 0.172865)
+
+    def test_get_invalid_submission_rank(self):
+        self.assertFalse(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(99999999)))
+
+    def test_get_valid_submission_comment_count(self):
+        self.assertEqual(self.vapy.get_submission_comment_count(self.vapy.submission_dict_from_id(213)), 3)
+
+    def test_get_invalid_submission_comment_count(self):
+        self.assertFalse(self.vapy.get_submission_comment_count(self.vapy.submission_dict_from_id(99999999)))
 
 if __name__ == '__main__':
     unittest.main()
