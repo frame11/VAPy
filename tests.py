@@ -18,7 +18,7 @@ class VAPyTests(unittest.TestCase):
         self.assertIn('Authorization', self.vapy.headers)
 
     def test_get_subverse_creation_date(self):
-        self.assertEquals(self.vapy.get_subverse_creation_date('api'), '2015-04-08T22:46:02.477')
+        self.assertEqual(self.vapy.get_subverse_creation_date('api'), '2015-04-08T22:46:02.477')
 
     def test_get_subverse_subscriber_count(self):
         self.assertIsInstance(self.vapy.get_subverse_subscriber_count("api"), int)
