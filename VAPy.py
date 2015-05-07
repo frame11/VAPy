@@ -30,21 +30,75 @@ class VAPy:
 
 
 
-    # SUBVERSE FUNCTIONS
+    # SUBVERSE INFO FUNCTIONS
 
     def subverse_info(self, subverse):
-        url = API_URL + "v/{}/info".format(subverse)
+        url = API_URL + 'v/{}/info'.format(subverse)
         r = requests.get(url, headers=self.headers) 
-        return json.loads(r.content)
+        return json.loads(r.content)['data']
 
     def get_subverse_creation_date(self, subverse):
-        return self.subverse_info(subverse)["creationDate"]
+        return self.subverse_info(subverse)['creationDate']
 
     def get_subverse_subscriber_count(self, subverse):
-        return int(self.subverse_info(subverse)["subscriberCount"])
+        return int(self.subverse_info(subverse)['subscriberCount'])
 
     def get_subverse_rated_adult(self, subverse):
-        return True if self.subverse_info(subverse)["ratedAdult"] == "true" else False
+        return True if self.subverse_info(subverse)['ratedAdult'] == 'true' else False
 
     def get_subverse_sidebar(self, subverse):
-        return self.subverse_info(subverse)["sidebar"]
+        return self.subverse_info(subverse)['sidebar']
+
+    # SUBMISSION GETTERS
+
+    def submission_by_id(self, submission_id):
+        url = API_URL + 'submissions/{}'.format(submission_id)
+        r = requests.get(url, headers=self.headers)
+        resp = json.loads(r.content)
+        return resp['data'] if resp['success'] == True else False
+
+    def get_subverse_submissions(self, subverse):
+        url = API_URL + 'v/{}'.format(subverse)
+        r = requests.get(url, headers=self.headers)
+        resp = json.loads(r.content)
+        return resp
+
+    def get_submission_type(self, submission_dict):
+        return 'text' if submission_dict['type'] == 1 else 'link'
+
+    def get_submission_content(self, submission_dict):
+        return submission_dict['link'] if self.get_submission_type(submission_dict) else submission_dict['formattedContent']
+
+    def get_submission_subverse(self, submission_dict):
+        return submission_dict['subverse']
+
+    def get_submission_title(self, submission_dict):
+        return submission_dict['title']
+
+    def get_submission_author(self, submission_dict):
+        return submission_dict['userName']
+
+    def get_submission_scores(self, submission_dict):
+        return submission_dict['upVotes'], submission_dict['downVotes']
+
+    def get_submission_score(self, submission_dict):
+        up, down = self.get_submission_scores(submission_dict)
+        return up - down
+
+    def get_submission_date(self, submission_dict):
+        return submission_dict['date']
+
+    def get_submission_ranl(self, submission_dict):
+        return submission_dict['rank']
+
+    def get_submission_comment_count(self, submission_dict):
+        return int(submission_dict['commentCount'])
+
+    # SUBMISSION FILTERS
+
+    def submission_is_text(self, submission_dict):
+        return True if self.get_submission_type == 'text' else False
+
+    def submission_is_link(self, submission_dict):
+        return True is self.get_submission_type == 'link' else False
+
