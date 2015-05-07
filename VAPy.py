@@ -34,20 +34,21 @@ class VAPy:
 
     def subverse_info(self, subverse):
         url = API_URL + 'v/{}/info'.format(subverse)
-        r = requests.get(url, headers=self.headers) 
-        return json.loads(r.content)['data']
+        r = requests.get(url, headers=self.headers)
+        resp = json.loads(r.content)
+        return resp['data'] if resp['success'] == True else False
 
     def get_subverse_creation_date(self, subverse):
-        return self.subverse_info(subverse)['creationDate']
+        return self.subverse_info(subverse)['creationDate'] if subverse != False else False
 
     def get_subverse_subscriber_count(self, subverse):
-        return int(self.subverse_info(subverse)['subscriberCount'])
+        return int(self.subverse_info(subverse)['subscriberCount']) if subverse != False else False
 
     def get_subverse_rated_adult(self, subverse):
-        return True if self.subverse_info(subverse)['ratedAdult'] == 'true' else False
-
+        return self.subverse_info(subverse)['ratedAdult'] if subverse != False else False
+    
     def get_subverse_sidebar(self, subverse):
-        return self.subverse_info(subverse)['sidebar']
+        return self.subverse_info(subverse)['sidebar'] if subverse != False else False
 
     # SUBMISSION GETTERS
 
@@ -94,6 +95,7 @@ class VAPy:
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
 
+
     # SUBMISSION FILTERS
 
     def submission_is_text(self, submission_dict):
@@ -101,4 +103,11 @@ class VAPy:
 
     def submission_is_link(self, submission_dict):
         return True if self.get_submission_type == 'link' else False
+
+
+    # COMMENT GETTERS
+
+    def comment_dict_from_id(self, comment_id):
+        url = 'comments/{}'.format(comment_id)
+        r = requests.get(url, headers=self.headers)
 
