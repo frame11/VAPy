@@ -55,7 +55,7 @@ class VAPy:
     
     @validate_input
     def get_subverse_rated_adult(self, subverse):
-        return self.subverse_info(subverse)['ratedAdult']
+        return 'unrated' if self.subverse_info(subverse)['ratedAdult'] == False else 'rated'
     
     @validate_input
     def get_subverse_sidebar(self, subverse):
@@ -75,9 +75,11 @@ class VAPy:
         resp = json.loads(r.content)
         return resp
 
+    @validate_input
     def get_submission_type(self, submission_dict):
         return 'text' if submission_dict['type'] == 1 else 'link'
 
+    @validate_input
     def get_submission_content(self, submission_dict):
         return submission_dict['link'] if self.get_submission_type(submission_dict) else submission_dict['formattedContent']
 
