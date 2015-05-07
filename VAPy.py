@@ -81,7 +81,8 @@ class VAPy:
 
     @validate_input
     def get_submission_content(self, submission_dict):
-        return submission_dict['link'] if self.get_submission_type(submission_dict) else submission_dict['formattedContent']
+        stype = self.get_submission_type(submission_dict)
+        return submission_dict['link'] if stype == 'link' else submission_dict['formattedContent']
 
     def get_submission_subverse(self, submission_dict):
         return submission_dict['subverse']
