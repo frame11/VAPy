@@ -22,6 +22,7 @@ class VAPy:
     def get_token(self, api_key, uname, pwd):
         body = 'grant_type=password&username={}&password={}'.format(uname,pwd)
         r = requests.post(TOKEN_URL, headers=self.headers, data=body)
+        r.connection.close()
         resp =  json.loads(r.content)
         if 'error' not in resp.keys():
             return resp['access_token']
@@ -43,6 +44,7 @@ class VAPy:
         url = API_URL + 'v/{}/info'.format(subverse)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
+        r.connection.close()
         return resp['data'] if resp['success'] == True else False
 
     @validate_input
@@ -67,12 +69,14 @@ class VAPy:
         url = API_URL + 'submissions/{}'.format(submission_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
+        r.connection.close()
         return resp['data'] if resp['success'] == True else False
 
     def get_subverse_submissions(self, subverse):
         url = API_URL + 'v/{}'.format(subverse)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
+        r.connection.close()
         return resp
 
     @validate_input
@@ -131,5 +135,6 @@ class VAPy:
     def comment_dict_from_id(self, comment_id):
         url = 'comments/{}'.format(comment_id)
         r = requests.get(url, headers=self.headers)
-    
+        resp = ""
+        r.connection.close()
 
