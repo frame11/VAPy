@@ -58,3 +58,6 @@ target/
 
 # swap
 *.swp
+
+# out of frame
+debug.py
