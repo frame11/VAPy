@@ -29,6 +29,13 @@ class VAPy:
             return False
 
 
+    def validate_input(func):
+        def wrapper(self, inp):
+            try:
+                return(func(self, inp))
+            except TypeError:
+                return False
+        return wrapper
 
     # SUBVERSE INFO FUNCTIONS
 
@@ -38,17 +45,21 @@ class VAPy:
         resp = json.loads(r.content)
         return resp['data'] if resp['success'] == True else False
 
+    @validate_input
     def get_subverse_creation_date(self, subverse):
-        return self.subverse_info(subverse)['creationDate'] if subverse != False else False
+        return self.subverse_info(subverse)['creationDate']
 
+    @validate_input
     def get_subverse_subscriber_count(self, subverse):
-        return int(self.subverse_info(subverse)['subscriberCount']) if subverse != False else False
-
-    def get_subverse_rated_adult(self, subverse):
-        return self.subverse_info(subverse)['ratedAdult'] if subverse != False else False
+        return int(self.subverse_info(subverse)['subscriberCount'])
     
+    @validate_input
+    def get_subverse_rated_adult(self, subverse):
+        return self.subverse_info(subverse)['ratedAdult']
+    
+    @validate_input
     def get_subverse_sidebar(self, subverse):
-        return self.subverse_info(subverse)['sidebar'] if subverse != False else False
+        return self.subverse_info(subverse)['sidebar']
 
     # SUBMISSION GETTERS
 
@@ -110,4 +121,5 @@ class VAPy:
     def comment_dict_from_id(self, comment_id):
         url = 'comments/{}'.format(comment_id)
         r = requests.get(url, headers=self.headers)
+    
 
