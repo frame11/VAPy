@@ -77,35 +77,42 @@ class VAPy:
 
     @validate_input
     def get_submission_type(self, submission_dict):
-        return 'text' if submission_dict['type'] == 1 else 'link'
+        return 'formattedContent' if submission_dict['type'] == 1 else 'url'
 
     @validate_input
     def get_submission_content(self, submission_dict):
-        stype = self.get_submission_type(submission_dict)
-        return submission_dict['link'] if stype == 'link' else submission_dict['formattedContent']
+        return submission_dict[self.get_submission_type(submission_dict)]
 
+    @validate_input
     def get_submission_subverse(self, submission_dict):
         return submission_dict['subverse']
 
+    @validate_input
     def get_submission_title(self, submission_dict):
         return submission_dict['title']
 
+    @validate_input
     def get_submission_author(self, submission_dict):
         return submission_dict['userName']
 
+    @validate_input
     def get_submission_scores(self, submission_dict):
         return submission_dict['upVotes'], submission_dict['downVotes']
 
+    @validate_input
     def get_submission_score(self, submission_dict):
         up, down = self.get_submission_scores(submission_dict)
         return up - down
 
+    @validate_input
     def get_submission_date(self, submission_dict):
         return submission_dict['date']
 
+    @validate_input
     def get_submission_ranl(self, submission_dict):
         return submission_dict['rank']
 
+    @validate_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
 
