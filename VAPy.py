@@ -14,7 +14,7 @@ TOKEN_URL = 'https://fakevout.azurewebsites.net/api/token'
 class VAPy:
     
     def __init__(self, api_key, uname, pwd):
-        self.headers = {'Voat-ApiKey': api_key}
+        self.headers = {'Voat-ApiKey': api_key, 'Content-Type': 'application/json'}
         token = self.get_token(api_key, uname, pwd)
         if token != False:
             self.headers['Authorization'] = 'Bearer {}'.format(token)
