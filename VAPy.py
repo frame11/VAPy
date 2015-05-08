@@ -18,6 +18,8 @@ class VAPy:
         token = self.get_token(api_key, uname, pwd)
         if token != False:
             self.headers['Authorization'] = 'Bearer {}'.format(token)
+    
+    # HELPER FUNCTIONS
 
     def get_token(self, api_key, uname, pwd):
         body = 'grant_type=password&username={}&password={}'.format(uname,pwd)
@@ -29,7 +31,6 @@ class VAPy:
         else:
             return False
 
-
     def validate_input(func):
         def wrapper(self, inp):
             try:
@@ -37,6 +38,9 @@ class VAPy:
             except KeyError:
                 return {}
         return wrapper
+
+    def querystring(search='', count=50):
+        return '?search={}&count={}'.format(search, count)
 
     # SUBVERSE INFO FUNCTIONS
 
@@ -62,7 +66,8 @@ class VAPy:
     @validate_input
     def get_subverse_sidebar(self, subverse):
         return self.subverse_info(subverse)['sidebar']
-
+    
+    # FIND
     # SUBMISSION GETTERS
 
     def submission_dict_from_id(self, submission_id):
