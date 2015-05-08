@@ -17,8 +17,9 @@ class VAPy:
         self.headers = {'Voat-ApiKey': api_key, 'Content-Type': 'application/json'}
         token = self.get_token(api_key, uname, pwd)
         if token != False:
-            self.headers['Authorization'] = 'Bearer {}'.format(token)
-    
+            #self.headers['Authorization'] = 'Bearer {}'.format(token)
+            self.headers = {'Voat-ApiKey':api_key,'Authorization':'Bearer '+token,'Content-Type':'application/json'}
+
     # HELPER FUNCTIONS
 
     def get_token(self, api_key, uname, pwd):
@@ -68,6 +69,20 @@ class VAPy:
         return self.subverse_info(subverse)['sidebar']
     
     # FIND
+
+
+    # POST
+
+    def post_text_submission(self, subverse, title, text):
+        url = API_URL + 'v/{}'.format(subverse)
+        body = json.dumps({'title':title,'content':text})
+        r = requests.post(url, headers=self.headers, data=body)
+
+    def post_link_submission(self, subverse, title, url):
+        url = API_URL + 'v/{}'.format(subverse)
+        body = json.dumps({'title':title,'url':url})
+        r = requests.post(url, headers=self.headers, data=body)
+
     # SUBMISSION GETTERS
 
     def submission_dict_from_id(self, submission_id):
