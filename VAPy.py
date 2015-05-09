@@ -77,11 +77,28 @@ class VAPy:
         url = API_URL + 'v/{}'.format(subverse)
         body = json.dumps({'title':title,'content':text})
         r = requests.post(url, headers=self.headers, data=body)
+        r.connection.close()
 
     def post_link_submission(self, subverse, title, url):
         url = API_URL + 'v/{}'.format(subverse)
         body = json.dumps({'title':title,'url':url})
         r = requests.post(url, headers=self.headers, data=body)
+        r.connection.close()
+
+    def post_reply_to_submission(self, submission_id, comment):
+        subverse = self.get_submission_subverse(submission_id)
+        url = API_URL + 'v/{}/{}/comment'.format(subverse, submission_id)
+        body = json.dumps({'Value':comment})
+        r = requests.post(url, headers=self.headers, data=body)
+        r.connection.close()
+
+    def post_reply_to_comment(self, comment_id, comment):
+        submission_id = self.get_comment_submission(self.comment_dict_from_id(comment_id))
+        subverse = self.get_submission_sibverse(self.submission_dict_from_id(submission_id))
+        url = API_URL + 'v/{}/{}/comment/{}'.format(subverse, submission_id, comment_id)
+        body = json.dumps({'Value':comment})
+        r = requests.post(url, headers=self.headers, data=body)
+        r.connection.close()
 
     # SUBMISSION GETTERS
 
@@ -161,6 +178,12 @@ class VAPy:
     def comment_dict_from_id(self, comment_id):
         url = 'comments/{}'.format(comment_id)
         r = requests.get(url, headers=self.headers)
-        resp = ""
+        resp = json.dumps(r.content)
         r.connection.close()
+        return resp['data'] if resp['success'] == True else {}
 
+    @validate_input
+    def get_comment_subverse(self, comment_dict)
+        return comment_dict['submissionID']
+
+    
