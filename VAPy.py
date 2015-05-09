@@ -62,7 +62,7 @@ class VAPy:
     
     @validate_input
     def get_subverse_rated_adult(self, subverse):
-        return 'unrated' if self.subverse_info(subverse)['ratedAdult'] == False else 'rated'
+        return self.subverse_info(subverse)['ratedAdult']
     
     @validate_input
     def get_subverse_sidebar(self, subverse):
