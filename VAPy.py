@@ -203,4 +203,7 @@ class VAPy:
             return up - down
         else:
             return {}
- 
+
+    @validate_input
+    def get_comment_author(self, comment_dict):
+        return comment_dict['userName']
