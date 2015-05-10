@@ -100,6 +100,12 @@ class VAPy:
         r = requests.post(url, headers=self.headers, data=body)
         r.connection.close()
 
+    def post_reply_to_pm(self, pm_id, comment):
+        url = API_URL + 'comments/{}'.format(pm_id)
+        body = json.dumps('Value':comment)
+        r = requests.post(url, headers=self.headers, data=body)
+        r.connection.close()
+    
     # SUBMISSION GETTERS
 
     def submission_dict_from_id(self, submission_id):
@@ -186,4 +192,15 @@ class VAPy:
     def get_comment_subverse(self, comment_dict)
         return comment_dict['submissionID']
 
-    
+   @validate_input
+    def get_comment_scores(self, comment_dict):
+        return comment_dict['upVotes'], commenet_dict['downVotes']
+
+    @validate_input
+    def get_comment_score(self, comment_dict):
+        if comment_dict != {}:
+            up, down = self.get_comment_scores(comment_dict)
+            return up - down
+        else:
+            return {}
+ 
