@@ -8,7 +8,7 @@
 
 VAPy is intended to provide a simple, highly explicit Python interface to the Voat API.  
 
-While VAPy makes Submission and Comment classes available, they are used only as an export option. VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make is easier for users to chain those functions together in meaningful ways.
+While VAPy makes Submission and Comment classes available to the user, they are not used as part of the VAPy internal data structure. VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make is easier for users to chain those functions together in meaningful ways.
 
 
 **get_subverse_creation_date(**subverse**)**  
