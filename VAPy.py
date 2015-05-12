@@ -146,11 +146,6 @@ class VAPy:
         return resp['data'] if resp['success'] == True else {}
     
     # VOAT DICT FUNCS
-
-    @check_input_is_submission
-    @check_empty_input
-    def get_submission_type(self, submission_dict):
-        return 'content' if submission_dict['type'] == 1 else 'url'
     
     #@check_input_not_pm
     @check_empty_input
@@ -159,10 +154,18 @@ class VAPy:
             return submission_dict[self.get_submission_type(submission_dict)]
         else:
             return {}
-    
+
     @check_empty_input
     def get_subverse(self, voat_dict):
         return voat_dict['subverse']
+
+
+    # SUBMISSION DICT FUNCS
+
+    @check_input_is_submission
+    @check_empty_input
+    def get_submission_type(self, submission_dict):
+        return 'content' if submission_dict['type'] == 1 else 'url'
 
     @check_input_is_submission
     @check_empty_input
@@ -224,5 +227,5 @@ class VAPy:
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
     
     def contains_regex_in_content(self, voat_dict, regex):
-        return bool(re.search(regex, self.
+        return bool(re.search(regex, self.get_content(voat_dict)))
     
