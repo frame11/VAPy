@@ -40,7 +40,7 @@ class VAPy:
                 return {}
         return wrapper
 
-    def check_dict_is_submission(func):
+    def check_input_is_submission(func):
         def wrapper(self, inp):
             if self.is_submission(inp):
                 return func(self, inp)
@@ -48,7 +48,7 @@ class VAPy:
                 print("You are calling submission-only methods on a comment")
                 return {}
 `
-    def check_dict_is_comment(func):
+    def check_input_is_comment(func):
         def wrapper(self, inp):
             if self.is_comment(inp):
                 return func(self, inp)
@@ -203,7 +203,7 @@ class VAPy:
         if search_link == False:
             return True if ( self.contains_regex_in_title(voat_dict, regex) OR
                              self.contains_reges_in_content(voat_dict
-
+    @
     def contains_regex_in_title(self, submission_dict, regex):
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
     
