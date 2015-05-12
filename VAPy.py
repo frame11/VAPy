@@ -136,49 +136,65 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else []
 
+    # COMMENT GETTERS
+
+    def comment_dict_from_id(self, comment_id):
+        url = 'comments/{}'.format(comment_id)
+        r = requests.get(url, headers=self.headers)
+        resp = json.dumps(r.content)
+        r.connection.close()
+        return resp['data'] if resp['success'] == True else {}
+    
+    # VOAT DICT FUNCS
+
+    @check_input_is_submission
     @check_empty_input
     def get_submission_type(self, submission_dict):
         return 'content' if submission_dict['type'] == 1 else 'url'
-
+    
+    #@check_input_not_pm
     @check_empty_input
-    def get_content(self, submission_dict):
-        if submission_dict != {}:
+    def get_content(self, voat_dict, include_links=False):
+        if (voat_dict != {}) and include_links == False:
             return submission_dict[self.get_submission_type(submission_dict)]
         else:
             return {}
     
     @check_empty_input
-    def get_submission_subverse(self, submission_dict):
-        return submission_dict['subverse']
+    def get_subverse(self, voat_dict):
+        return voat_dict['subverse']
 
+    @check_input_is_submission
     @check_empty_input
     def get_submission_title(self, submission_dict):
         return submission_dict['title']
 
     @check_empty_input
-    def get_submission_author(self, submission_dict):
-        return submission_dict['userName']
+    def get_author(self, voat_dict):
+        return voat_dict['userName']
 
     @check_empty_input
-    def get_submission_scores(self, submission_dict):
-        return submission_dict['upVotes'], submission_dict['downVotes']
+    def get_scores(self, voat_dict):
+        return voat_dict['upVotes'], voat_dict['downVotes']
 
     @check_empty_input
-    def get_submission_score(self, submission_dict):
-        if submission_dict != {}:
-            up, down = self.get_submission_scores(submission_dict)
+    def get_score(self, voat_dict):
+        if voat_dict != {}:
+            up, down = self.get_scores(voat_dict)
             return up - down
         else:
             return {}
 
     @check_empty_input
-    def get_submission_date(self, submission_dict):
-        return submission_dict['date']
+    def get_date(self, voat_dict):
+        return voat_dict['date']
 
+    @check_input_is_submission
     @check_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
+    @check_input_is_submission
     @check_empty_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
@@ -200,41 +216,13 @@ class VAPy:
 
     def contains_regex(self, voat_dict, regex, search_link=False):
         if search_link == False:
-            return True if ( self.contains_regex_in_title(voat_dict, regex) OR
-                             self.contains_reges_in_content(voat_dict
+            return True if ( self.contains_regex_in_title(voat_dict, regex) or
+                             self.contains_reges_in_content(voat_dict, regex) ) else False
     
     @check_input_is_submission
     def contains_regex_in_title(self, submission_dict, regex):
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
     
-    def contains_regex_in_content(self, 
+    def contains_regex_in_content(self, voat_dict, regex):
+        return bool(re.search(regex, self.
     
-    
-    # COMMENT GETTERS
-
-    def comment_dict_from_id(self, comment_id):
-        url = 'comments/{}'.format(comment_id)
-        r = requests.get(url, headers=self.headers)
-        resp = json.dumps(r.content)
-        r.connection.close()
-        return resp['data'] if resp['success'] == True else {}
-
-    @check_empty_input
-    def get_comment_subverse(self, comment_dict)
-        return comment_dict['submissionID']
-
-   @check_empty_input
-    def get_comment_scores(self, comment_dict):
-        return comment_dict['upVotes'], commenet_dict['downVotes']
-
-    @check_empty_input
-    def get_comment_score(self, comment_dict):
-        if comment_dict != {}:
-            up, down = self.get_comment_scores(comment_dict)
-            return up - down
-        else:
-            return {}
-
-    @check_empty_input
-    def get_comment_author(self, comment_dict):
-        return comment_dict['userName']
