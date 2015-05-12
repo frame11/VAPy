@@ -40,6 +40,21 @@ class VAPy:
                 return {}
         return wrapper
 
+    def check_dict_is_submission(func):
+        def wrapper(self, inp):
+            if self.is_submission(inp):
+                return func(self, inp)
+            else:
+                print("You are calling submission-only methods on a comment")
+                return {}
+`
+    def check_dict_is_comment(func):
+        def wrapper(self, inp):
+            if self.is_comment(inp):
+                return func(self, inp)
+            else:
+                print("You are calling comment-only methods on a submission")
+
     def querystring(search='', count=50):
         return '?search={}&count={}'.format(search, count)
 
