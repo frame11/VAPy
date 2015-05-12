@@ -124,10 +124,10 @@ class VAPy:
 
     @validate_input
     def get_submission_type(self, submission_dict):
-        return 'formattedContent' if submission_dict['type'] == 1 else 'url'
+        return 'content' if submission_dict['type'] == 1 else 'url'
 
     @validate_input
-    def get_submission_content(self, submission_dict):
+    def get_content(self, submission_dict):
         if submission_dict != {}:
             return submission_dict[self.get_submission_type(submission_dict)]
         else:
@@ -170,15 +170,31 @@ class VAPy:
         return int(submission_dict['commentCount'])
 
 
-    # SUBMISSION FILTERS
+    # FILTERS
 
-    def submission_is_text(self, submission_dict):
-        return True if self.get_submission_type == 'text' else False
+    def is_submission(self, voat_dict):
+        return True if 'type' in voat_dict.keys() else False
 
-    def submission_is_link(self, submission_dict):
-        return True if self.get_submission_type == 'link' else False
+    def is_comment(self, voat_dict):
+        return True if 'parentID' in voat_dict.keys() else False
 
+    def is_content_submission(self, submission_dict):
+        return True if self.get_submission_type == 'content' else False
 
+    def is_url_submission(self, submission_dict):
+        return True if self.get_submission_type == 'url' else False
+
+    def contains_regex(self, voat_dict, regex, search_link=False):
+        if search_link == False:
+            return True if ( self.contains_regex_in_title(voat_dict, regex) OR
+                             self.contains_reges_in_content(voat_dict
+
+    def contains_regex_in_title(self, submission_dict, regex):
+        return bool(re.search(regex, self.get_submission_title(submission_dict))) 
+    
+    def contains_regex_in_content(self, 
+    
+    
     # COMMENT GETTERS
 
     def comment_dict_from_id(self, comment_id):
