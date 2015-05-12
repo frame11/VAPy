@@ -139,7 +139,7 @@ class VAPy:
     # COMMENT GETTERS
 
     def comment_dict_from_id(self, comment_id):
-        url = 'comments/{}'.format(comment_id)
+        url = API_URL + 'comments/{}'.format(comment_id)
         r = requests.get(url, headers=self.headers)
         resp = json.dumps(r.content)
         r.connection.close()
