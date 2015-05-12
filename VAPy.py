@@ -32,7 +32,7 @@ class VAPy:
         else:
             return False
 
-    def validate_input(func):
+    def check_empty_input(func):
         def wrapper(self, inp):
             try:
                 return(func(self, inp))
@@ -52,19 +52,19 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    @validate_input
+    @check_empty_input
     def get_subverse_creation_date(self, subverse):
         return self.subverse_info(subverse)['creationDate']
 
-    @validate_input
+    @check_empty_input
     def get_subverse_subscriber_count(self, subverse):
         return int(self.subverse_info(subverse)['subscriberCount'])
     
-    @validate_input
+    @check_empty_input
     def get_subverse_rated_adult(self, subverse):
         return self.subverse_info(subverse)['ratedAdult']
     
-    @validate_input
+    @check_empty_input
     def get_subverse_sidebar(self, subverse):
         return self.subverse_info(subverse)['sidebar']
     
@@ -122,34 +122,34 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else []
 
-    @validate_input
+    @check_empty_input
     def get_submission_type(self, submission_dict):
         return 'content' if submission_dict['type'] == 1 else 'url'
 
-    @validate_input
+    @check_empty_input
     def get_content(self, submission_dict):
         if submission_dict != {}:
             return submission_dict[self.get_submission_type(submission_dict)]
         else:
             return {}
     
-    @validate_input
+    @check_empty_input
     def get_submission_subverse(self, submission_dict):
         return submission_dict['subverse']
 
-    @validate_input
+    @check_empty_input
     def get_submission_title(self, submission_dict):
         return submission_dict['title']
 
-    @validate_input
+    @check_empty_input
     def get_submission_author(self, submission_dict):
         return submission_dict['userName']
 
-    @validate_input
+    @check_empty_input
     def get_submission_scores(self, submission_dict):
         return submission_dict['upVotes'], submission_dict['downVotes']
 
-    @validate_input
+    @check_empty_input
     def get_submission_score(self, submission_dict):
         if submission_dict != {}:
             up, down = self.get_submission_scores(submission_dict)
@@ -157,15 +157,15 @@ class VAPy:
         else:
             return {}
 
-    @validate_input
+    @check_empty_input
     def get_submission_date(self, submission_dict):
         return submission_dict['date']
 
-    @validate_input
+    @check_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
-    @validate_input
+    @check_empty_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
 
@@ -204,15 +204,15 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    @validate_input
+    @check_empty_input
     def get_comment_subverse(self, comment_dict)
         return comment_dict['submissionID']
 
-   @validate_input
+   @check_empty_input
     def get_comment_scores(self, comment_dict):
         return comment_dict['upVotes'], commenet_dict['downVotes']
 
-    @validate_input
+    @check_empty_input
     def get_comment_score(self, comment_dict):
         if comment_dict != {}:
             up, down = self.get_comment_scores(comment_dict)
@@ -220,6 +220,6 @@ class VAPy:
         else:
             return {}
 
-    @validate_input
+    @check_empty_input
     def get_comment_author(self, comment_dict):
         return comment_dict['userName']
