@@ -1,4 +1,4 @@
-import getpass, unittest
+mport getpass, unittest
 import VAPy
 
 class VAPyTests(unittest.TestCase):
@@ -120,7 +120,7 @@ class VAPyTests(unittest.TestCase):
         self.assertEqual(self.vapy.get_date(self.vapy.submission_dict_from_id(99999999)), {})
     
     def test_get_valid_comment_date(self):
-        self.assertEqual(self.vapy.get_date(self.vapy.comment_dict_from_id(2635)), '2015-05-07T08:41:44.067')
+        self.assertEqual(self.vapy.get_date(self.vapy.comment_dict_from_id(2635)), '2015-05-08T19:17:51.9')
 
     def test_get_invalid_comment_date(self):
         self.assertEqual(self.vapy.get_date(self.vapy.comment_dict_from_id(99999999)), {})
