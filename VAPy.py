@@ -116,7 +116,7 @@ class VAPy:
 
     def post_reply_to_pm(self, pm_id, comment):
         url = API_URL + 'comments/{}'.format(pm_id)
-        body = json.dumps('Value':comment)
+        body = json.dumps({'Value':comment})
         r = requests.post(url, headers=self.headers, data=body)
         r.connection.close()
     
