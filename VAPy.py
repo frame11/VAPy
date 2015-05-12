@@ -150,8 +150,13 @@ class VAPy:
     #@check_input_not_pm
     @check_empty_input
     def get_content(self, voat_dict, include_links=False):
-        if (voat_dict != {}) and include_links == False:
-            return submission_dict[self.get_submission_type(submission_dict)]
+        if (voat_dict != {}) and (include_links == False):
+            return voat_dict['content']
+        elif (voat_dict != {}) and (include_links == True):
+            if self.is_url_submission(voat_dict):
+                return voat_dict['url']
+            else:
+                return voat_dict['content']
         else:
             return {}
 
