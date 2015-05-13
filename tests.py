@@ -53,7 +53,7 @@ class VAPyTests(unittest.TestCase):
     def test_get_text_submission_content(self):
         self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(209)), 'testicular') 
 
-    def test_get_url_submission_content(self):
+    def test_get_requested_url_submission_content(self):
         self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(211), include_links=True), 'https://github.com/frame11/VAPy')
 
     def test_get_invalid_submission_content(self):
@@ -164,7 +164,7 @@ class VAPyTests(unittest.TestCase):
         self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(209)))
 
     def test_invalid_submission_contains_regex_in_title(self):
-        self.assertEqual(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(99999999)))
 
 
 if __name__ == '__main__':
