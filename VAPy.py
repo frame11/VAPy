@@ -167,12 +167,12 @@ class VAPy:
 
     # SUBMISSION DICT FUNCS
 
-    @check_input_is_submission
+    #@check_input_is_submission
     @check_empty_input
     def get_submission_type(self, submission_dict):
         return 'content' if submission_dict['type'] == 1 else 'url'
 
-    @check_input_is_submission
+    #@check_input_is_submission
     @check_empty_input
     def get_submission_title(self, submission_dict):
         return submission_dict['title']
@@ -197,12 +197,12 @@ class VAPy:
     def get_date(self, voat_dict):
         return voat_dict['date']
 
-    @check_input_is_submission
+    #@check_input_is_submission
     @check_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
-    @check_input_is_submission
+    #@check_input_is_submission
     @check_empty_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
