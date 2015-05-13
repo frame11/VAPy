@@ -32,12 +32,20 @@ class VAPy:
         else:
             return False
 
-    def check_empty_input(func):
+    def catch_empty_input(func):
         def wrapper(self, *args, **kwargs):
             try:
                 return(func(self, *args, **kwargs))
             except (KeyError, TypeError):
                 return {}
+        return wrapper
+    
+    def catch_empty_filter_input(func):
+        def wrapper(self, *args, **kwargs):
+            try:
+                return(func(self, *args, **kwargs))
+            except (KeyError, TypeError):
+                return False
         return wrapper
 
     def check_input_is_submission(func):
@@ -66,19 +74,19 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    @check_empty_input
+    @catch_empty_input
     def get_subverse_creation_date(self, subverse):
         return self.subverse_info(subverse)['creationDate']
 
-    @check_empty_input
+    @catch_empty_input
     def get_subverse_subscriber_count(self, subverse):
         return int(self.subverse_info(subverse)['subscriberCount'])
     
-    @check_empty_input
+    @catch_empty_input
     def get_subverse_rated_adult(self, subverse):
         return self.subverse_info(subverse)['ratedAdult']
     
-    @check_empty_input
+    @catch_empty_input
     def get_subverse_sidebar(self, subverse):
         return self.subverse_info(subverse)['sidebar']
     
@@ -147,7 +155,7 @@ class VAPy:
     
     # VOAT DICT FUNCS
     
-    @check_empty_input
+    @catch_empty_input
     def get_content(self, voat_dict, include_links=False):
         if (voat_dict != {}) and (include_links == False):
             return voat_dict['content']
@@ -159,7 +167,7 @@ class VAPy:
         else:
             return {}
 
-    @check_empty_input
+    @catch_empty_input
     def get_subverse(self, voat_dict):
         if self.is_submission(voat_dict):        
             return voat_dict['subverse']
@@ -168,15 +176,15 @@ class VAPy:
             #return self.get_subverse(self.submission_dict_from_id(submission_id))
             return self.submission_dict_from_id(submission_id)['subverse']
 
-    @check_empty_input
+    @catch_empty_input
     def get_author(self, voat_dict):
         return voat_dict['userName']
 
-    @check_empty_input
+    @catch_empty_input
     def get_scores(self, voat_dict):
         return voat_dict['upVotes'], voat_dict['downVotes']
 
-    @check_empty_input
+    @catch_empty_input
     def get_score(self, voat_dict):
         if voat_dict != {}:
             up, down = self.get_scores(voat_dict)
@@ -184,31 +192,31 @@ class VAPy:
         else:
             return {}
 
-    @check_empty_input
+    @catch_empty_input
     def get_date(self, voat_dict):
         return voat_dict['date']
 
     # SUBMISSION DICT FUNCS
 
-    @check_empty_input
+    @catch_empty_input
     def get_submission_type(self, submission_dict):
         return 'content' if submission_dict['type'] == 1 else 'url'
 
-    @check_empty_input
+    @catch_empty_input
     def get_submission_title(self, submission_dict):
         return submission_dict['title']
 
-    @check_empty_input
+    @catch_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
-    @check_empty_input
+    @catch_empty_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
 
     # COMMENT DICT FUNCS
 
-    @check_empty_input
+    @catch_empty_input
     def get_comment_submission(self, comment_dict):
         return comment_dict['submissionID']
 
@@ -230,7 +238,7 @@ class VAPy:
         if search_link == False:
             return True if ( self.contains_regex_in_title(voat_dict, regex) or self.contains_regex_in_content(voat_dict, regex) ) else False
     
-    @check_empty_input   
+    @catch_empty_filter_input   
     def contains_regex_in_title(self, regex, submission_dict):
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
     
