@@ -1,4 +1,4 @@
-import requests
+import re, requests
 
 try:
         import ujson as json
@@ -33,10 +33,10 @@ class VAPy:
             return False
 
     def check_empty_input(func):
-        def wrapper(self, inp):
+        def wrapper(self, *args, **kwargs):
             try:
-                return(func(self, inp))
-            except KeyError:
+                return(func(self, *args, **kwargs))
+            except (KeyError, TypeError):
                 return {}
         return wrapper
 
@@ -108,7 +108,7 @@ class VAPy:
 
     def post_reply_to_comment(self, comment_id, comment):
         submission_id = self.get_comment_submission(self.comment_dict_from_id(comment_id))
-        subverse = self.get_submission_sibverse(self.submission_dict_from_id(submission_id))
+        subverse = self.get_submission_subverse(self.submission_dict_from_id(submission_id))
         url = API_URL + 'v/{}/{}/comment/{}'.format(subverse, submission_id, comment_id)
         body = json.dumps({'Value':comment})
         r = requests.post(url, headers=self.headers, data=body)
@@ -147,7 +147,6 @@ class VAPy:
     
     # VOAT DICT FUNCS
     
-    #@check_input_not_pm
     @check_empty_input
     def get_content(self, voat_dict, include_links=False):
         if (voat_dict != {}) and (include_links == False):
@@ -162,20 +161,12 @@ class VAPy:
 
     @check_empty_input
     def get_subverse(self, voat_dict):
-        return voat_dict['subverse']
-
-
-    # SUBMISSION DICT FUNCS
-
-    #@check_input_is_submission
-    @check_empty_input
-    def get_submission_type(self, submission_dict):
-        return 'content' if submission_dict['type'] == 1 else 'url'
-
-    #@check_input_is_submission
-    @check_empty_input
-    def get_submission_title(self, submission_dict):
-        return submission_dict['title']
+        if self.is_submission(voat_dict):        
+            return voat_dict['subverse']
+        else:
+            submission_id = self.get_comment_submission(voat_dict)
+            #return self.get_subverse(self.submission_dict_from_id(submission_id))
+            return self.submission_dict_from_id(submission_id)['subverse']
 
     @check_empty_input
     def get_author(self, voat_dict):
@@ -197,16 +188,29 @@ class VAPy:
     def get_date(self, voat_dict):
         return voat_dict['date']
 
-    #@check_input_is_submission
+    # SUBMISSION DICT FUNCS
+
+    @check_empty_input
+    def get_submission_type(self, submission_dict):
+        return 'content' if submission_dict['type'] == 1 else 'url'
+
+    @check_empty_input
+    def get_submission_title(self, submission_dict):
+        return submission_dict['title']
+
     @check_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
-    #@check_input_is_submission
     @check_empty_input
     def get_submission_comment_count(self, submission_dict):
         return int(submission_dict['commentCount'])
 
+    # COMMENT DICT FUNCS
+
+    @check_empty_input
+    def get_comment_submission(self, comment_dict):
+        return comment_dict['submissionID']
 
     # FILTERS
 
@@ -217,20 +221,19 @@ class VAPy:
         return True if 'parentID' in voat_dict.keys() else False
 
     def is_content_submission(self, submission_dict):
-        return True if self.get_submission_type == 'content' else False
+        return True if self.get_submission_type(submission_dict) == 'content' else False
 
     def is_url_submission(self, submission_dict):
-        return True if self.get_submission_type == 'url' else False
+        return True if self.get_submission_type(submission_dict) == 'url' else False
 
-    def contains_regex(self, voat_dict, regex, search_link=False):
+    def contains_regex(self, regex, voat_dict, search_link=False):
         if search_link == False:
-            return True if ( self.contains_regex_in_title(voat_dict, regex) or
-                             self.contains_reges_in_content(voat_dict, regex) ) else False
+            return True if ( self.contains_regex_in_title(voat_dict, regex) or self.contains_regex_in_content(voat_dict, regex) ) else False
     
-    @check_input_is_submission
-    def contains_regex_in_title(self, submission_dict, regex):
+    @check_empty_input   
+    def contains_regex_in_title(self, regex, submission_dict):
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
     
-    def contains_regex_in_content(self, voat_dict, regex):
+    def contains_regex_in_content(self, regex, voat_dict):
         return bool(re.search(regex, self.get_content(voat_dict)))
     
