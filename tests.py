@@ -1,4 +1,4 @@
-mport getpass, unittest
+import getpass, unittest
 import VAPy
 
 class VAPyTests(unittest.TestCase):
@@ -34,10 +34,10 @@ class VAPyTests(unittest.TestCase):
         self.assertEqual(self.vapy.get_subverse_subscriber_count('yoloswagbotfactorystar'), {})
 
     def test_get_sfw_subverse_rated_adult(self):
-        self.assertEqual(self.vapy.get_subverse_rated_adult('api'), 'unrated')
+        self.assertFalse(self.vapy.get_subverse_rated_adult('api'))
 
     def test_get_nsfw_subverse_rated_adult(self):
-        self.assertEqual(self.vapy.get_subverse_rated_adult('frame11'), 'rated')
+        self.assertTrue(self.vapy.get_subverse_rated_adult('frame11'))
 
     def test_invalid_get_subverse_rated_adult(self):
         self.assertEqual(self.vapy.get_subverse_rated_adult('yoloswapbotfactorystar'), {})
@@ -161,7 +161,7 @@ class VAPyTests(unittest.TestCase):
         self.assertTrue(self.vapy.contains_regex_in_title('test', self.vapy.submission_dict_from_id(209)))
 
     def test_neg_valid_submission_contains_regex_in_title(self):
-        self.assertFalse(self.vapy.contians_regex_in_title('pasta', self.vapy.submission_dict_from_id(209)))
+        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(209)))
 
     def test_invalid_submission_contains_regex_in_title(self):
         self.assertEqual(self.vapy.contains_regex_in_title(self.vapy.submission_dict_from_id(99999999)), {})
