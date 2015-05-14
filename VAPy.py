@@ -35,7 +35,8 @@ class VAPy:
     def catch_empty_input(func):
         def wrapper(self, *args, **kwargs):
             try:
-                return(func(self, *args, **kwargs))
+                result = func(self, *args, **kwargs)
+                return result if type(result) != None else {}
             except (KeyError, TypeError):
                 return {}
         return wrapper
@@ -156,10 +157,10 @@ class VAPy:
     # VOAT DICT FUNCS
     
     @catch_empty_input
-    def get_content(self, voat_dict, include_links=False):
-        if (voat_dict != {}) and (include_links == False):
+    def get_content(self, voat_dict, ignore_links=False):
+        if (voat_dict != {}) and (ignore_links == True):
             return voat_dict['content']
-        elif (voat_dict != {}) and (include_links == True):
+        elif (voat_dict != {}) and (ignore_links == False):
             if self.is_url_submission(voat_dict):
                 return voat_dict['url']
             else:
@@ -207,6 +208,10 @@ class VAPy:
         return submission_dict['title']
 
     @catch_empty_input
+    def get_submission_link(self, submission_dict):
+        return submission_dict['url']
+
+    @catch_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
@@ -234,14 +239,20 @@ class VAPy:
     def is_url_submission(self, submission_dict):
         return True if self.get_submission_type(submission_dict) == 'url' else False
 
-    def contains_regex(self, regex, voat_dict, search_link=False):
-        if search_link == False:
-            return True if ( self.contains_regex_in_title(voat_dict, regex) or self.contains_regex_in_content(voat_dict, regex) ) else False
-    
+    def contains_regex(self, regex, voat_dict, ignore_links=False):
+        if ignore_links == False:
+            return True if ( self.contains_regex_in_title(regex, voat_dict) or self.contains_regex_in_content(regex, voat_dict) ) else False
+        else:
+            return True if ( self.contains_regex_in_title(regex, voat_dict) or self.contains_regex_in_content(regex, voat_dict, ignore_links=True) ) else False
+
     @catch_empty_filter_input   
     def contains_regex_in_title(self, regex, submission_dict):
         return bool(re.search(regex, self.get_submission_title(submission_dict))) 
-    
+   
+    @catch_empty_filter_input
     def contains_regex_in_content(self, regex, voat_dict):
         return bool(re.search(regex, self.get_content(voat_dict)))
-    
+   
+    @catch_empty_filter_input
+    def contains_regex_in_link(self, regex, submission_dict):
+        return bool(re.search(regex, self.get_submission_link(submission_dict)))
