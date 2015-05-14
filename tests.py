@@ -53,8 +53,11 @@ class VAPyTests(unittest.TestCase):
     def test_get_text_submission_content(self):
         self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(209)), 'testicular') 
 
+    def test_get_text_submission_content_with_ignore_links(self):
+        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(209), ignore_links=True), 'testicular')
+    
     def test_get_requested_url_submission_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(211), include_links=True), 'https://github.com/frame11/VAPy')
+        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(211)), 'https://github.com/frame11/VAPy')
 
     def test_get_invalid_submission_content(self):
         self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(99999999)), {})
@@ -142,6 +145,15 @@ class VAPyTests(unittest.TestCase):
     def test_get_invalid_submission_title(self):
         self.assertEqual(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(99999999)), {})
 
+    def test_get_valid_link_submission_link(self):
+        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(211)), 'https://github.com/frame11/VAPy')
+
+    def test_get_text_submission_link(self):
+        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(209)), {})
+
+    def test_get_invalid_submission_link(self):
+        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(99999999)), {})
+    
     def test_get_submission_rank(self):
         self.assertEqual(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(213)), 0.172865)
 
@@ -165,6 +177,58 @@ class VAPyTests(unittest.TestCase):
 
     def test_invalid_submission_contains_regex_in_title(self):
         self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(99999999)))
+
+    def test_pos_valid_text_submission_contains_regex_in_content(self):
+        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.submission_dict_from_id(213)))
+
+    def test_neg_valid_text_submission_contains_regex_in_content(self):
+        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.submission_dict_from_id(213)))
+
+    def test_pos_valid_link_submission_contains_regex_in_content(self):
+        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.submission_dict_from_id(213)))
+
+    def test_neg_valid_link_submission_contains_regex_in_content(self):
+        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.submission_dict_from_id(213)))
+    
+    def test_pos_valid_link_submission_contains_regex_in_link(self):
+        self.assertTrue(self.vapy.contains_regex_in_link('github', self.vapy.submission_dict_from_id(211)))
+    
+    def test_neg_valid_link_submission_contains_regex_in_link(self):
+        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.submission_dict_from_id(211)))
+
+    def test_valid_text_submission_contains_regex_in_link(self):
+        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.submission_dict_from_id(209)))
+
+    def test_invalid_submission_contains_regex_in_link(self):
+        self.assertFalse(self.vapy.contains_regex_in_link('github', self.vapy.submission_dict_from_id(99999999)))
+
+    def test_pos_in_title_valid_submission_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('test', self.vapy.submission_dict_from_id(209)))
+
+    def test_pos_in_text_content_valid_submission_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('test', self.vapy.submission_dict_from_id(213)))
+
+    def test_pos_in_link_content_valid_submission_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('github', self.vapy.submission_dict_from_id(211)))
+
+    def test_pos_in_both_valid_submission_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('not', self.vapy.submission_dict_from_id(213)))
+
+    def test_neg_valid_submission_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.submission_dict_from_id(213)))
+    
+    def test_invalid_submission_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.submission_dict_from_id(99999999)))
+
+    def test_pos_valid_comment_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('spin', self.vapy.comment_dict_from_id(2609)))
+
+    def test_neg_valid_comment_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.comment_dict_from_id(2609)))
+
+    def test_invalid_comment_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.comment_dict_from_id(99999999)))
+
 
 
 if __name__ == '__main__':
