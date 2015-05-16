@@ -10,6 +10,10 @@ VAPy is intended to provide a simple, highly explicit Python interface to the Vo
 
 While VAPy makes Submission and Comment classes available to the user, they are not used as part of the VAPy internal data structure. VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make is easier for users to chain those functions together in meaningful ways.
 
+VAPy provides a Profiles component which can be run from IDLE a user agent and API key management system. Profiles may then be imported by any VAPy application, providing secure local persistence and renewal serivces for API tokens. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
+
+
+#####Subverse Information
 
 **get_subverse_creation_date(**subverse**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns string "YYY-MM-DDDOWHH:MM:SS:MSS"  
