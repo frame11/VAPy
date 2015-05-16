@@ -225,6 +225,9 @@ class VAPy:
     def get_comment_submission(self, comment_dict):
         return comment_dict['submissionID']
 
+    def get_parent_id(self, comment_dict):
+        return
+
     # FILTERS
 
     def is_submission(self, voat_dict):
@@ -256,3 +259,7 @@ class VAPy:
     @catch_empty_filter_input
     def contains_regex_in_link(self, regex, submission_dict):
         return bool(re.search(regex, self.get_submission_link(submission_dict)))
+
+    @catch_empty_filter_input
+    def is_top_level_comment(self, comment_dict):
+        return bool(comment_dict['parentID'])
