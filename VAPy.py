@@ -226,7 +226,7 @@ class VAPy:
         return comment_dict['submissionID']
 
     def get_parent_id(self, comment_dict):
-        return
+        return comment_dict['parentID']
 
     # FILTERS
 
