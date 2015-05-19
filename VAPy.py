@@ -5,6 +5,7 @@ try:
 except:
         import json
 
+import Profiles
 
 API_URL = 'https://fakevout.azurewebsites.net/api/v1/'
 TOKEN_URL = 'https://fakevout.azurewebsites.net/api/token'
@@ -13,24 +14,30 @@ TOKEN_URL = 'https://fakevout.azurewebsites.net/api/token'
 
 class VAPy:
     
-    def __init__(self, api_key, uname, pwd):
-        self.headers = {'Voat-ApiKey': api_key, 'Content-Type': 'application/json'}
-        token = self.get_token(api_key, uname, pwd)
-        if token != False:
-            #self.headers['Authorization'] = 'Bearer {}'.format(token)
-            self.headers = {'Voat-ApiKey':api_key,'Authorization':'Bearer '+token,'Content-Type':'application/json'}
+    def __init__(self, uname, pwd, api_key):
+        pass
 
     # HELPER FUNCTIONS
 
-    def get_token(self, api_key, uname, pwd):
+    def get_token(self, uname, pwd, api_key):
+        temp_header = {'Voat-ApiKey': api_key, 'Content-Type': 'application/json'}
         body = 'grant_type=password&username={}&password={}'.format(uname,pwd)
-        r = requests.post(TOKEN_URL, headers=self.headers, data=body)
+        r = requests.post(TOKEN_URL, headers=temp_header, data=body)
         r.connection.close()
         resp =  json.loads(r.content)
         if 'error' not in resp.keys():
             return resp['access_token']
         else:
             return False
+    
+    def set_headers(self, uname, pwd, api_key, api_token):
+        self.headers = {'Voat-ApiKey':api_key,'Authorization':'Bearer '+token,'Content-Type':'application/json'}
+
+    def load_profile(self, profile, pwd):
+        self.profiles = Profiles.Profiles()
+
+
+    # WRAPPERS
 
     def catch_empty_input(func):
         def wrapper(self, *args, **kwargs):
@@ -153,7 +160,15 @@ class VAPy:
         resp = json.loads(r.content)
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
-    
+
+    def comment_dicts_from_submission(self, submission_id):
+        subverse = self.get_subverse(self.submission_dict_from_id(submission_id))
+        url = API_URL + 'v/{}/{}/comments'.format(subverse, submission_id)
+        r = requests.get(url, headers=self.headers)
+        resp = json.loads(r.content)
+        r.connection.close()
+        return resp['data'] if resp['success'] == True else []
+
     # VOAT DICT FUNCS
     
     @catch_empty_input
@@ -196,6 +211,16 @@ class VAPy:
     @catch_empty_input
     def get_date(self, voat_dict):
         return voat_dict['date']
+
+    @catch_empty_input
+    def get_id(self, voat_dict):
+        return voat_dict['id']
+
+    @catch_empty_input
+    def get_permalink(self, voat_dict):
+        if self.is_submission(voat_dict):
+            return "https://fakevout.azurewebsites.net/v/{}/comments/{}".format(
+                    self.get_subverse(voat_dict), self.get_id(voat_dict))
 
     # SUBMISSION DICT FUNCS
 
