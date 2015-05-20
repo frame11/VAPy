@@ -77,8 +77,9 @@ class Profiles:
         self.c.execute("SELECT * FROM profiles WHERE profile=?", (profile,))
         res = c.fetchone()
         uname = simplecrypt.decrypt(pwd, res[1]) 
-
-
+        api_key = simplecrypt.decrypt(pwd, res[2])
+        token = simplecrypt.decrypt(pwd, res[3])
+        return (uname, pwd, api_key, token)
 
 
 def standalone():
