@@ -7,14 +7,14 @@ class VAPyTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(VAPyTests):
-        VAPyTests.key = input("Please enter api_key: ")
-        VAPyTests.uname = input("Please enter username: ")
-        VAPyTests.pwd = getpass.getpass("Please enter password: ")
+        VAPyTests.pwd = getpass.getpass(prompt="Enter password for test profile: ")
         
-        
+
+
     def setUp(self):
-        self.vapy = VAPy.VAPy(self.key, self.uname, self.pwd)
-    
+        self.vapy = VAPy.VAPy()
+        self.vapy.load_profile("test", self.pwd)
+
     # HELPER TESTS
 
     def test_get_token(self):
