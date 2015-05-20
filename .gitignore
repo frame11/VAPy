@@ -63,3 +63,4 @@ target/
 # out of frame
 debug.py
 debug
+objects
