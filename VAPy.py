@@ -14,7 +14,7 @@ TOKEN_URL = 'https://fakevout.azurewebsites.net/api/token'
 
 class VAPy:
     
-    def __init__(self, uname, pwd, api_key):
+    def __init__(self):
         pass
 
     # HELPER FUNCTIONS
