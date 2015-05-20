@@ -68,7 +68,7 @@ class Profiles:
         self.c.execute("SELECT profile FROM profiles")
         result = self.c.fetchall()
         profile_lst = [r[0] for r in result]
-        print(profile_lst)
+        print(*profile_lst, sep="\n")
 
 
     def get_profile(profile, pwd):
