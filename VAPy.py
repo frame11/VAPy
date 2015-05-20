@@ -38,6 +38,10 @@ class VAPy:
         res = profiles.get_profile(profile, pwd)
         self.set_headers(res[0], res[1], res[2], res[3])
 
+    def querystring(search='', count=50):
+        return '?search={}&count={}'.format(search, count)
+
+
     # WRAPPERS
 
     def catch_empty_input(func):
@@ -71,8 +75,6 @@ class VAPy:
             else:
                 raise ValueError('You are calling comment-only methods on something that is not a comment')
 
-    def querystring(search='', count=50):
-        return '?search={}&count={}'.format(search, count)
 
     # SUBVERSE INFO FUNCTIONS
 
