@@ -31,11 +31,12 @@ class VAPy:
             return False
     
     def set_headers(self, uname, pwd, api_key, api_token):
-        self.headers = {'Voat-ApiKey':api_key,'Authorization':'Bearer '+token,'Content-Type':'application/json'}
+        self.headers = {'Voat-ApiKey':api_key,'Authorization':'Bearer '+api_token,'Content-Type':'application/json'}
 
     def load_profile(self, profile, pwd):
-        self.profiles = Profiles.Profiles()
-
+        profiles = Profiles.Profiles()
+        res = profiles.get_profile(profile, pwd)
+        self.set_headers(res[0], res[1], res[2], res[3])
 
     # WRAPPERS
 

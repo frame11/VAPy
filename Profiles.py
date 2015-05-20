@@ -71,12 +71,12 @@ class Profiles:
         print(*profile_lst, sep="\n")
 
 
-    def get_profile(profile, pwd):
+    def get_profile(self, profile, pwd):
         self.c.execute("SELECT * FROM profiles WHERE profile=?", (profile,))
-        res = c.fetchone()
-        uname = simplecrypt.decrypt(pwd, res[1]) 
-        api_key = simplecrypt.decrypt(pwd, res[2])
-        token = simplecrypt.decrypt(pwd, res[3])
+        res = self.c.fetchone()
+        uname = simplecrypt.decrypt(pwd, res[1]).decode('utf-8')
+        api_key = simplecrypt.decrypt(pwd, res[2]).decode('utf-8')
+        token = simplecrypt.decrypt(pwd, res[3]).decode('utf-8')
         return (uname, pwd, api_key, token)
 
     def remove_profile(self, profile):
