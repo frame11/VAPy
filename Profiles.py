@@ -1,5 +1,5 @@
 
-import getpass, os, platform, simplecrypt, sqlite3
+import getpass, os, platform, simplecrypt, sqlite3, sys
 
 class Profiles:
 
@@ -63,7 +63,6 @@ class Profiles:
                                 , (profile, cuname, capi_key, ctoken))
 
                 self.db.commit()
-                self.db.close()
 
     def list_profiles(self):
         self.c.execute("SELECT profile FROM profiles")
@@ -73,7 +72,6 @@ class Profiles:
 
 
     def get_profile(profile, pwd):
-
         self.c.execute("SELECT * FROM profiles WHERE profile=?", (profile,))
         res = c.fetchone()
         uname = simplecrypt.decrypt(pwd, res[1]) 
@@ -81,7 +79,17 @@ class Profiles:
         token = simplecrypt.decrypt(pwd, res[3])
         return (uname, pwd, api_key, token)
 
+    def remove_profile(self, profile):
+        self.c.execute("SELECT COUNT(*) FROM profiles WHERE profile=?", (profile,))
+        result = self.c.fetchone()
+        if result[0] == 0:
+            print("The profile {} does not exist. Please recheck input.".format(profile))
+        else:
+            self.c.execute("DELETE FROM profiles WHERE profile=?", (profile,))
+            self.db.commit()
+            print("Profile {} has been removed.".format(profile))
 
+                    
 def standalone():
     print("::VAPy Profile Management::")
     
@@ -91,28 +99,41 @@ def standalone():
 
     while run:
     
-        mode = input("Select 'a'dd, 'r'emove, 'l'ist, re'i'nitialize, 'q'uit:")
+        mode = input("Select 'a'dd, 'r'emove, 'l'ist, re'i'nitialize, 'q'uit: ")
     
         if mode == 'a':
-            print("::Add New Profile::")
+            print("Creating new profile")
             profile = input("Enter profile name (Voat app name): ")
             uname = input("Enter Voat user name: ")
             pwd = getpass.getpass(prompt="Enter Voat password: ")
+            pwd2 = getpass.getpass(prompt="Confirm Voat password: ")
+            while pwd != pwd2:
+                print("Passwords did not match.")
+                pwd = getpass.getpass(prompt="Enter Voat password: ")
+                pwd2 = getpass.getpass(prompt="Confirm Voat password: ")
             key = input("Enter Voat api key: ")
             p.add_profile(profile, uname, pwd, key)
             print("Api token successfully retreived.")
-            print("Voat crednetials encrypted and added to database.")
+            print("Voat credentials encrypted and added to database.")
 
         elif mode == 'r':
-            print("Enter name of profile to remove from database:")
-            pass
+            profile = input("Enter name of profile to remove from database: ")
+            print("This action will delete {} from profiles.".format(profile))
+            inp = input("This action cannot be undone. Confirm with 'Y': ")
+            if inp == 'Y':
+                p.remove_profile(profile)
+            else:
+                print("Action cancelled.")
+        
         elif mode == 'i':
             print("This will erase all profiles from the database. This action cannot be undone. It is probably not what you actually want to do.")
-            pass
+        
         elif mode == 'l':
             p.list_profiles()
+        
         elif mode == 'q':
-            pass
+            sys.exit()
+        
         else:
             print("Invalid selection")
 
