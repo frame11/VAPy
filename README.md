@@ -1,20 +1,28 @@
 # VAPy
 ###The Voat API wrapper for Python3  
 ---  
-#####IN PROGRESS - ALL CLAIMS SUBJECT TO CHANGE - CURRENTLY NONFUNCTIONAL
+#####IN PROGRESS - ALL CLAIMS SUBJECT TO CHANGE - CONSIDER TO BE NONFUNCTIONAL
 ---  
 
-
+####ABOUT  
 
 VAPy is intended to provide a simple, highly explicit Python interface to the Voat API.  
 
+VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
+
 While VAPy makes Submission and Comment classes available to the user, they are not used as part of the VAPy internal data structure. VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make is easier for users to chain those functions together in meaningful ways.
 
-VAPy includes the Profiles component, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
+
 
 ---
 ####GETTING STARTED  
 To use VAPy you need a valid Voat.co login and api key.  
+
+It is recommended that you first create a profile:
+
+`$ python3 Profiles.py`  
+
+Select "add" and provide a profile name, Voat login credentials, and API key when prompted. After creating a profile, VAPy will handle OAuth2 authentication with the Voat API. Information (other than profile name) is encrytped in a local database using the provided Voat password as the encryption key. It should be noted that "loss" of this password will make recovery of information from the database impossible.  
 
 
 #####Initializing VAPy
@@ -24,9 +32,9 @@ All VAPy methods are available to any instance of VAPy with a properly initializ
 `vapy = VAPy.VAPy()`  
 `vapy.load_profile(<profile>, <pwd>)`
 
-*load_profile()* will retreive the profile named `<profile>` and create
+`load_profile()` will retreive the profile named `<profile>` and create a working headers attribute.
 
-VAPy can be used without the Profiles component with the set_headers() method:  
+VAPy can be used without the Profiles component by directly calling the `set_headers()` method:  
   
 ```vapy = Vapy.Vapy()  ```  
 ```vapy.set_headers(<uname>, <pwd>, <key>, <token>)```
@@ -44,15 +52,15 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 Accept Voat submission or comment dictionaries (or both) and return dictionary values. Intended for primary use with list comprehensions.  
   
 
+&nbsp;&nbsp;&nbsp;&nbsp;`user_names = [vapy.get_author(d) for d in some_itr_of_voat_content_dicts]`  
 
-&nbsp;&nbsp;&nbsp;&nbsp;`links = [vapy.get_links(d) for d in filter(is_url_submission, itr_of_victs)]`
 
 #####Filter Methods  
 Intended to be used primarily with filter(), VAPy filter methods accept voat content dictionaries and return a boolean value.  
 &nbsp;&nbsp;&nbsp;&nbsp;`main_comments = filter  
 
-&nbsp;&nbsp;&nbsp;&nbsp;`user_names = [vapy.get_author(d) for d in some_itr_of_voat_content_dicts]`  
 
+&nbsp;&nbsp;&nbsp;&nbsp;`links = [vapy.get_links(d) for d in filter(is_url_submission, itr_of_victs)]`
 #####Subverse Information Methods
 Accept a subverse name as a string and return the appropriate subverse information.  
 
