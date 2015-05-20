@@ -18,11 +18,11 @@ While VAPy makes Submission and Comment classes available to the user, they are 
 ####GETTING STARTED  
 To use VAPy you need a valid Voat.co login and api key.  
 
-It is recommended that you first create a profile:
+It is recommended that you first create a profile by running Profiles as a standalone applicaiton:
 
 `$ python3 Profiles.py`  
 
-Select "add" and provide a profile name, Voat login credentials, and API key when prompted. After creating a profile, VAPy will handle OAuth2 authentication with the Voat API. Information (other than profile name) is encrytped in a local database using the provided Voat password as the encryption key. It should be noted that "loss" of this password will make recovery of information from the database impossible.  
+Select "add" and provide a profile name, Voat login credentials, and API key when prompted. After creating a profile, VAPy will handle OAuth2 authentication with the Voat API. Information (other than profile name) is encrytped in a local database using the provided Voat password as the encryption key. "Loss" of your password will make recovery of  profile information from the database impossible. Note: Voat password is required for Voat API token generation, and is used as the encryption passphrase to eliminate the need for two passwords per profile. Your Voat password is not stored within the local database.  
 
 
 #####Initializing VAPy
@@ -40,7 +40,16 @@ VAPy can be used without the Profiles component by directly calling the `set_hea
 ```vapy.set_headers(<uname>, <pwd>, <key>, <token>)```
   
 
-After setting the headers all VAPy functions will work with or without use of Profiles.  
+After setting the headers attribute, VAPy functions will work regardless of the use of Profiles.  
+  
+*Where does Profiles store information on my computer?*  
+
+|Operating System|Directory|  
+|:-:|:-:|  
+| Linux | /var/lib/vapy/ |
+| Windows | ??? |
+| OS X | ??? |
+
 
 ---
 ####VAPy METHODS  
