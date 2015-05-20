@@ -37,7 +37,7 @@ class Profiles:
             #self.db = sqlite3.connect(self.wd + "profiles")
             #self.c = self.db.cursor()
             self.connect()
-            self.c.execute("CREATE TABLE profiles (profile text, uname text, pwd text, api_key text, token text)")
+            self.c.execute("CREATE TABLE profiles (profile text, uname text, api_key text, token text)")
             self.db.commit()
             self.db.close()
 
@@ -49,7 +49,7 @@ class Profiles:
             print("Profile '{}' already exists in Profiles.")
         else :
             import VAPy
-            vapy = VAPy.VAPy(uname, pwd, api_key)
+            vapy = VAPy.VAPy()
             token = vapy.get_token(uname, pwd, api_key)
             if not token:
                 print("VAPy was unable to retreive a Voat API token with the credentials you provided.")
@@ -57,24 +57,26 @@ class Profiles:
                 print("Encrypting and storing Voat API credentials. This may take a moment.")
                 ctoken = simplecrypt.encrypt(pwd, token)
                 cuname = simplecrypt.encrypt(pwd, uname)
-                cpwd = simplecrypt.encrypt(pwd, pwd)
                 capi_key = simplecrypt.encrypt(pwd, api_key)
                 
-                self.c.execute("INSERT INTO profiles (profile, uname, pwd, api_key, token) VALUES (?,?,?,?,?)"
-                                , (profile, cuname, cpwd, capi_key, ctoken))
+                self.c.execute("INSERT INTO profiles (profile, uname, api_key, token) VALUES (?,?,?,?)"
+                                , (profile, cuname, capi_key, ctoken))
 
                 self.db.commit()
                 self.db.close()
 
     def list_profiles(self):
-        pass
+        self.c.execute("SELECT profile FROM profiles")
+        result = self.c.fetchall()
+        profile_lst = [r[0] for r in result]
+        print(profile_lst)
 
 
     def get_profile(profile, pwd):
 
         self.c.execute("SELECT * FROM profiles WHERE profile=?", (profile,))
         res = c.fetchone()
-        print(res)
+        uname = simplecrypt.decrypt(pwd, res[1]) 
 
 
 
