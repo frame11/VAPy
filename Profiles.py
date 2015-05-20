@@ -1,14 +1,13 @@
 
-import getpass, os, platform, simplecrypt, sqlite3, sys
+import getpass, os, simplecrypt, sqlite3, sys
 
 class Profiles:
 
     def __init__(self):
 
         #Set working directory for data persistence
-        sys = platform.system()
-        if sys == 'linux':
-            self.wd = '/var/lib/vapy/'
+        if sys.platform  == 'linux':
+            self.wd = os.path.expanduser('~') + "/.vapy"
         elif sys == 'win32' or 'win64':
             pass
         elif sys == 'darwin':
@@ -16,8 +15,6 @@ class Profiles:
         
 
 
-        ####THIS IS A DEBUG LINE - REMOVE IT!
-        self.wd = "./"
 
         self.check_for_initial_run()
         
@@ -26,13 +23,13 @@ class Profiles:
     # HELPERS
 
     def connect(self):
-        self.db = sqlite3.connect(self.wd+"profiles")
+        self.db = sqlite3.connect(self.wd+"/profiles")
         self.c = self.db.cursor()
 
     def check_for_initial_run(self):
         if not os.path.isdir(self.wd):
             os.makedirs(self.wd)
-        if not os.path.isfile(self.wd + 'profiles'):
+        if not os.path.isfile(self.wd + '/profiles'):
             
             #self.db = sqlite3.connect(self.wd + "profiles")
             #self.c = self.db.cursor()
