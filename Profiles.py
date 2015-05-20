@@ -4,7 +4,7 @@ import getpass, os, platform, simplecrypt, sqlite3
 class Profiles:
 
     def __init__(self):
-        
+
         #Set working directory for data persistence
         sys = platform.system()
         if sys == 'linux':
@@ -13,31 +13,105 @@ class Profiles:
             pass
         elif sys == 'darwin':
             pass
+        
 
+
+        ####THIS IS A DEBUG LINE - REMOVE IT!
+        self.wd = "./"
+
+        self.check_for_initial_run()
+        
+        self.connect()
+
+    # HELPERS
+
+    def connect(self):
+        self.db = sqlite3.connect(self.wd+"profiles")
+        self.c = self.db.cursor()
 
     def check_for_initial_run(self):
         if not os.path.isdir(self.wd):
             os.makedirs(self.wd)
-            self.db = sqlite3.connect(self.wd + "profiles")
-            self.c = self.db.cursor()
-            self.c.execute("CREATE TABLE profiles (agent_name text, uname text, pwd text, api_key text, token text)")
+        if not os.path.isfile(self.wd + 'profiles'):
+            
+            #self.db = sqlite3.connect(self.wd + "profiles")
+            #self.c = self.db.cursor()
+            self.connect()
+            self.c.execute("CREATE TABLE profiles (profile text, uname text, pwd text, api_key text, token text)")
             self.db.commit()
             self.db.close()
 
-    def add_profile(self, agent_name, uname, pwd, api_key):
+    def add_profile(self, profile, uname, pwd, api_key):
         
-        self.c.execute("SELECT COUNT(*) FROM profiles WHERE agent_name=?", (agent_name,))
+        self.c.execute("SELECT COUNT(*) FROM profiles WHERE profile=?", (profile,))
         result = self.c.fetchone()
         if not result[0] == 0:
-            print("Agent '{}' already exists in Profiles.")
+            print("Profile '{}' already exists in Profiles.")
         else :
             import VAPy
-            token = VAPy.VAPy.get_token(api_key, uname, pwd)
-            ctoken = simplecrypt.encrypt(token, pwd)
-            cuser = simplecrypt.encrypt(user, pwd)
-            cpwd = simplecrypt.encrypt(pwd, pwd)
-            capi_key = simplecrypt(api_key, pwd)
+            vapy = VAPy.VAPy(uname, pwd, api_key)
+            token = vapy.get_token(uname, pwd, api_key)
+            if not token:
+                print("VAPy was unable to retreive a Voat API token with the credentials you provided.")
+            else:
+                print("Encrypting and storing Voat API credentials. This may take a moment.")
+                ctoken = simplecrypt.encrypt(pwd, token)
+                cuname = simplecrypt.encrypt(pwd, uname)
+                cpwd = simplecrypt.encrypt(pwd, pwd)
+                capi_key = simplecrypt.encrypt(pwd, api_key)
+                
+                self.c.execute("INSERT INTO profiles (profile, uname, pwd, api_key, token) VALUES (?,?,?,?,?)"
+                                , (profile, cuname, cpwd, capi_key, ctoken))
 
+                self.db.commit()
+                self.db.close()
 
-    def get_list_of_profiles(self):
+    def list_profiles(self):
         pass
+
+
+    def get_profile(profile, pwd):
+
+        self.c.execute("SELECT * FROM profiles WHERE profile=?", (profile,))
+        res = c.fetchone()
+        print(res)
+
+
+
+
+def standalone():
+    print("::VAPy Profile Management::")
+    
+    p = Profiles()
+
+    run = True
+
+    while run:
+    
+        mode = input("Select 'a'dd, 'r'emove, 'l'ist, re'i'nitialize, 'q'uit:")
+    
+        if mode == 'a':
+            print("::Add New Profile::")
+            profile = input("Enter profile name (Voat app name): ")
+            uname = input("Enter Voat user name: ")
+            pwd = getpass.getpass(prompt="Enter Voat password: ")
+            key = input("Enter Voat api key: ")
+            p.add_profile(profile, uname, pwd, key)
+            print("Api token successfully retreived.")
+            print("Voat crednetials encrypted and added to database.")
+
+        elif mode == 'r':
+            print("Enter name of profile to remove from database:")
+            pass
+        elif mode == 'i':
+            print("This will erase all profiles from the database. This action cannot be undone. It is probably not what you actually want to do.")
+            pass
+        elif mode == 'l':
+            p.list_profiles()
+        elif mode == 'q':
+            pass
+        else:
+            print("Invalid selection")
+
+if __name__ == '__main__':
+    standalone()
