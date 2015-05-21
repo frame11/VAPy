@@ -10,7 +10,9 @@ VAPy is intended to provide a simple, highly explicit Python interface to the Vo
 
 VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
 
-While VAPy makes Submission and Comment classes available to the user, they are not used as part of the VAPy internal data structure. VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make is easier for users to chain those functions together in meaningful ways.
+Instead of providing Submission and Comment classes to the user, VAPy encourages a more functional approach and consists largely of simple functions and methods designed to make it easier for users to chain those functions together in meaningful ways.
+
+VAPy additionally includes Vapp, a Voat application framework class heirarchy.
 
 
 
