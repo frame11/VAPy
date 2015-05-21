@@ -236,10 +236,6 @@ class VAPy:
         return submission_dict['title']
 
     @catch_empty_input
-    def get_submission_link(self, submission_dict):
-        return submission_dict['url']
-
-    @catch_empty_input
     def get_submission_rank(self, submission_dict):
         return float(submission_dict['rank'])
 
