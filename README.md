@@ -46,7 +46,7 @@ After setting the headers attribute, VAPy functions will work regardless of the 
 
 |Operating System|Directory|  
 |:-:|:-:|  
-| Linux | /var/lib/vapy/ |
+| Linux | ~/.vapy/ |
 | Windows | ??? |
 | OS X | ??? |
 
