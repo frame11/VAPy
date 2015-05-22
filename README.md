@@ -127,9 +127,9 @@ Some keys are shared between submission and comment dicts while others are uniqu
 #####Filter Methods  
 Intended to be used primarily with filter(), VAPy filter methods accept voat content dictionaries and return a boolean value.  
   
-&nbsp;&nbsp;&nbsp;&nbsp;`main_comments = filter`  
+&nbsp;&nbsp;&nbsp;&nbsp;`main_comments = filter(vapy.is_top_level_comment, itr_of_dicts`  
   
-&nbsp;&nbsp;&nbsp;&nbsp;`links = [vapy.get_links(d) for d in filter(is_url_submission, itr_of_victs)]`
+&nbsp;&nbsp;&nbsp;&nbsp;`links = [vapy.get_links(d) for d in filter(is_url_submission, itr_of_dicts)]`
 
 **contains_regex(**voat_dict, ignore_links=False**)**  
 &nbsp;&nbsp;&nbsp;&nbsp; **True** if regex in title or content or link of submission or content of comment, **False** if not. If ignore_links == True, link submissions always return **False**.
