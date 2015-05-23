@@ -1,42 +1,20 @@
 
-import getpass, os, simplecrypt, sqlite3, sys
+import getpass, simplecrypt, sqlite3
 
-class Profiles:
+from PersistenceService import PersistenceService
+
+class Profiles(PersistenceService):
 
     def __init__(self):
-
-        #Set working directory for data persistence
-        if sys.platform  == 'linux':
-            self.wd = os.path.expanduser('~') + "/.vapy"
-        elif sys == 'win32' or 'win64':
-            pass
-        elif sys == 'darwin':
-            pass
-        
-
-
-
-        self.check_for_initial_run()
-        
-        self.connect()
+        super(Profiles, self).__init__("profiles")
 
     # HELPERS
 
-    def connect(self):
-        self.db = sqlite3.connect(self.wd+"/profiles")
-        self.c = self.db.cursor()
-
-    def check_for_initial_run(self):
-        if not os.path.isdir(self.wd):
-            os.makedirs(self.wd)
-        if not os.path.isfile(self.wd + '/profiles'):
-            
-            #self.db = sqlite3.connect(self.wd + "profiles")
-            #self.c = self.db.cursor()
-            self.connect()
-            self.c.execute("CREATE TABLE profiles (profile text, uname text, api_key text, token text)")
-            self.db.commit()
-            self.db.close()
+    def initialize_database(self):
+        self.connect()
+        self.c.execute("CREATE TABLE profiles (profile text, uname text, api_key text, token text)")
+        self.db.commit()
+        self.db.close()
 
     def add_profile(self, profile, uname, pwd, api_key):
         
