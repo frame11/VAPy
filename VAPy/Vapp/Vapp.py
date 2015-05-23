@@ -8,17 +8,26 @@ except:
 import VAPy
 
 class Vapp(object):
-
+    
 
     def __init__(self):
+
+        self.app_name = ""        
+        self.app_dir = "./"
+        self.nsfw = False
+        self.subverses = []
+        
         
         self.load_config()
+        if not self.validate_config_load():
+            print("There is a problem with config.json")
+            return None
+
         self.vapy = VAPy.VAPy()
         pwd = getpass.getpass(prompt="Enter password: ")
         self.vapy.load_profile(self.profile, pwd)
+        
 
-        subverses = []
-        self.nsfw = False
 
 
     def load_config(self):
@@ -26,3 +35,10 @@ class Vapp(object):
             config = json.load(cf)
         for key in config.keys():
             setattr(self, key, config[key])
+
+    def validate_config_load(self):
+        return True if (
+                       type(self.app_name) == str and len(self.app_name) > 0 and
+                       len(self.subverses) > 0
+                       ) else False
+
