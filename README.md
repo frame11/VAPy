@@ -178,7 +178,7 @@ Accept a subverse name as a string and return the appropriate subverse informati
 ###Tests
 VAPy methods are covered by tests.py, which uses Profiles for OAuth2 management. To run tests.py it is necessary to create a valid profile with the profile name "test". Alternatively, the user can alter the load_profile() call of VAPyTests.setUp() to load any profile desired.
 
-Tests run rather slow becuase of the overhead on decrypting OAuth2 credentials for each VAPy instance. The values could get loaded into a holder in the setUpClass() call, and then passed to the VAPy isntance with setHeader() rather than using load_profile(). This should greaty reduce testing time.
+Tests run rather slow because of the overhead on decrypting OAuth2 credentials for each VAPy instance. The values could get loaded into a holder in the setUpClass() call, and then passed to the VAPy isntance with setHeader() rather than using load_profile(). This should greatly reduce testing time.
 
  
 ##Vapp - Voat Application Framework  
