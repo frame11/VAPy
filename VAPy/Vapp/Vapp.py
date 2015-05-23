@@ -5,21 +5,24 @@ try:
 except:
     import json
 
-import VAPy.VAPy
+import VAPy
 
-class Vapp(Object):
+class Vapp(object):
 
-    def __init__(self, profile=""):
+
+    def __init__(self):
+        
+        self.load_config()
         self.vapy = VAPy.VAPy()
         pwd = getpass.getpass(prompt="Enter password: ")
-        self.vapy.load_profile(profile, pwd)
+        self.vapy.load_profile(self.profile, pwd)
 
         subverses = []
         self.nsfw = False
 
 
     def load_config(self):
-        with open("./config.json") as cf:
-            config = ujson.loads(cf.read())
-
-        print(config)
+        with open('./Vapp/config.json') as cf:
+            config = json.load(cf)
+        for key in config.keys():
+            setattr(self, key, config[key])
