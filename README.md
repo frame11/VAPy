@@ -177,6 +177,12 @@ Accept a subverse name as a string and return the appropriate subverse informati
 
 ##Vapp - Voat Application Framework  
 
+The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to actually change 
+
+Vapp applicaitons use [SQLite3](https://www.sqlite.org/) for local data persistence.
+
+
+
 ###Class Hierarchy  
 
 ####Vapp()  
@@ -232,3 +238,5 @@ class GreeterBot(ResponseBot):
 The applicaiton can be run from the command line:
 
 `$ python3 GreeterBot.py`  
+
+The bot is now set up to reply to any submission on /v/introductions that mentions Reddit or certain scifi franchises. It welcomes new users, reminds them to comment so they can start earning CCP, and trolls Star Wars fans.
