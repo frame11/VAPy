@@ -174,7 +174,13 @@ Accept a subverse name as a string and return the appropriate subverse informati
 
 **get_subverse_sidebar(**subverse**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns raw (html) sidebar text
+  
+###Tests
+VAPy methods are covered by tests.py, which uses Profiles for OAuth2 management. To run tests.py it is necessary to create a valid profile with the profile name "test". Alternatively, the user can alter the load_profile() call of VAPyTests.setUp() to load any profile desired.
 
+Tests run rather slow becuase of the overhead on decrypting OAuth2 credentials for each VAPy instance. The values could get loaded into a holder in the setUpClass() call, and then passed to the VAPy isntance with setHeader() rather than using load_profile(). This should greaty reduce testing time.
+
+ 
 ##Vapp - Voat Application Framework  
 
 The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup. Additionally, because of the functional approach of VAPy, Vapp features can generally be modified by the insertion of additional VAPy functions into functions chains without breaking tests. For those seeking to maintain mximum test coverage, the process of adding/modifying the test code should be straight forward. I realize it may not be, but it should.  
@@ -207,10 +213,8 @@ user defined config.json attributes:
   
 predefined config.json attributes:  
 - *nsfw* is a boolean value, default False. If False, the application ignores all NSFW flagged content.  
-- *adult_app* is a boolean value, default False. If True, all posts by application are flagged NSFW.  
+- *adult_app* is a boolean value, default False. If True, all posts by application are flagged NSFW.   
 - *store_view_cache* is a boolean value, default False. If True, view cache is persistent across sesssions.
-- 
-
 
 ####Response Bot(Vapp)  
 A Voat application that searches Voat content, and upon finding a match for user provided regex pattern(s) constructs a post and response.  
