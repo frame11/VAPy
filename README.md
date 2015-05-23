@@ -10,9 +10,9 @@ VAPy is intended to provide a simple, highly explicit Python interface to the Vo
 
 While Python wrappers for other APIs are typically centered around Submission and Comment classes, VAPy encourages a somewhat more functional approach and consists largely of simple functions and methods designed to make it easier for users to chain those functions together in meaningful ways.
 
-VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
+VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. This gives users a "setup and ignore" approach to OAuth2 authentication. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
 
-VAPy includes [Vapp](#vapp---voat-application-framework), a Voat application framework designed to make it even easier to implement simple applications using VAPy. Vapp is more a thought than it is code right now, but it'll have to exist in some form. It may just end up as an additional set of functions in VAPy instead of their own classes.
+VAPy includes [Vapp](#vapp---voat-application-framework), a Voat application framework designed to make it even easier to implement simple applications using VAPy.
 
 
 
@@ -177,7 +177,7 @@ Accept a subverse name as a string and return the appropriate subverse informati
 
 ##Vapp - Voat Application Framework  
 
-The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to actually change 
+The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup.
 
 Vapp applicaitons use [SQLite3](https://www.sqlite.org/) for local data persistence.
 
@@ -188,16 +188,15 @@ Vapp applicaitons use [SQLite3](https://www.sqlite.org/) for local data persiste
 ####Vapp()  
 Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initializes the Records class which provides local data persistence for the applicaiton.  
 
-User defined attributes:  
-- *target_subverse*  is a list of one or more subverses that the bot will read and write content to and from.  
-&nbsp;&nbsp;&nbsp;&nbsp;`vapp.subverses = [<subverse>, <subverse>, ...]`  
-- *nsfw* is a boolean value. If False, the bot ignores all NSFW flagged content. **NOTE** This does not cause posts by the bot to be flagged NSFW.  
-&nbsp;&nbsp;&nbsp;&nbsp;`vapp.nsfw = <true/false>`
+config.json attributes:  
+- *target_subverse*  is a list of one or more subverses (strings) that the application will read and write content to and from.  
+- *nsfw* is a boolean value. If False, the application ignores all NSFW flagged content. **NOTE** This does not cause posts by the bot to be flagged NSFW.  
+- *adult_app* is a boolean value. If True, all posts by application are flagged NSFW.
 
 ####Response Bot(Vapp)  
 A Voat application that searches Voat content, and upon finding a match for user provided regex pattern(s) constructs a post and response.  
 
-User defined attributes:  
+config.json attributes:  
 - *target_content*  is a list of one or more subverses that the bot will read and write content to and from.  
 &nbsp;&nbsp;&nbsp;&nbsp;`vapp.target_subverse = [<subverse>, <subverse>, ...]`  
   
@@ -238,5 +237,7 @@ class GreeterBot(ResponseBot):
 The applicaiton can be run from the command line:
 
 `$ python3 GreeterBot.py`  
+
+The application will prompt the user for the password associated with their Voat account before running.
 
 The bot is now set up to reply to any submission on /v/introductions that mentions Reddit or certain scifi franchises. It welcomes new users, reminds them to comment so they can start earning CCP, and trolls Star Wars fans.
