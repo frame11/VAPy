@@ -145,15 +145,6 @@ class VAPyTests(unittest.TestCase):
     def test_get_invalid_submission_title(self):
         self.assertEqual(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(99999999)), {})
 
-    def test_get_valid_link_submission_link(self):
-        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(211)), 'https://github.com/frame11/VAPy')
-
-    def test_get_text_submission_link(self):
-        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(209)), {})
-
-    def test_get_invalid_submission_link(self):
-        self.assertEqual(self.vapy.get_submission_link(self.vapy.submission_dict_from_id(99999999)), {})
-    
     def test_get_submission_rank(self):
         self.assertEqual(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(213)), 0.172865)
 
