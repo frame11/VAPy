@@ -12,7 +12,7 @@ While Python wrappers for other APIs are typically centered around Submission an
 
 VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
 
-VAPy includes Vapp, a Voat application framework designed to make it even easier to implement simple applications using VAPy. Vapp is more a thought than it is code right now, but it'll have to exist in some form. It may just end up as an additional set of functions in VAPy instead of their own classes.
+VAPy includes [Vapp](#vapp---voat-application-framework), a Voat application framework designed to make it even easier to implement simple applications using VAPy. Vapp is more a thought than it is code right now, but it'll have to exist in some form. It may just end up as an additional set of functions in VAPy instead of their own classes.
 
 
 
@@ -184,7 +184,7 @@ Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initi
 
 User defined attributes:  
 - *target_subverse*  is a list of one or more subverses that the bot will read and write content to and from.  
-&nbsp;&nbsp;&nbsp;&nbsp;`vapp.target_subverse = [<subverse>, <subverse>, ...]`  
+&nbsp;&nbsp;&nbsp;&nbsp;`vapp.subverses = [<subverse>, <subverse>, ...]`  
 - *nsfw* is a boolean value. If False, the bot ignores all NSFW flagged content. **NOTE** This does not cause posts by the bot to be flagged NSFW.  
 &nbsp;&nbsp;&nbsp;&nbsp;`vapp.nsfw = <true/false>`
 
@@ -207,7 +207,7 @@ An example demonstrating the simplicity of setting up a Response Bot application
 
 ```
 class GreeterBot(ResponseBot):
-    self.target_subverse = ["introductions"]
+    self.subverses = ["introductions"]
     self.target_content = "text submissions"
     self.head = None
     self.tail = "Don't forget to comment and start earning CCP."
