@@ -75,7 +75,7 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 
 
 #####Dictionary Methods  
-Accept Voat submission or comment dictionaries (or both) and return dictionary values. Intended for primary use with list comprehensions.  
+Returns values from (or calculated from) Voat content dictionaries.  
 
 &nbsp;&nbsp;&nbsp;&nbsp;`user_names = [vapy.get_author(d) for d in some_itr_of_voat_content_dicts]`  
 
@@ -144,10 +144,21 @@ Intended to be used primarily with filter(), VAPy filter methods accept voat con
 &nbsp;&nbsp;&nbsp;&nbsp; **True** if comment is directly under submission, **False** is comment is under another comment.
 
 
-#####Find Methods
-
 #####Post Methods
+**post_text_submission(**subverse, title, text**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Submit a new text submission.
 
+**post_link_submission(**subverse, title, url**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Submit a new link submission.
+
+**post_reply_to_submission(**submission_id, comment**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Submit a new top-level comment to a submission.
+
+**post_reply_to_comment(**comment_id, comment**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Submit a new comment in response to another comment.
+
+**post_reply_to_pm(**pm_id, comment**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Submit reply to a personal message.  
 
 #####Subverse Information Methods
 Accept a subverse name as a string and return the appropriate subverse information.  
@@ -164,3 +175,60 @@ Accept a subverse name as a string and return the appropriate subverse informati
 **get_subverse_sidebar(**subverse**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns raw (html) sidebar text
 
+##Vapp - Voat Application Framework  
+
+###Class Hierarchy  
+
+####Vapp()  
+Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initializes the Records class which provides local data persistence for the applicaiton.  
+
+User defined attributes:  
+- *target_subverse*  is a list of one or more subverses that the bot will read and write content to and from.  
+&nbsp;&nbsp;&nbsp;&nbsp;`vapp.target_subverse = [<subverse>, <subverse>, ...]`  
+- *nsfw* is a boolean value. If False, the bot ignores all NSFW flagged content. **NOTE** This does not cause posts by the bot to be flagged NSFW.  
+&nbsp;&nbsp;&nbsp;&nbsp;`vapp.nsfw = <true/false>`
+
+####Response Bot(Vapp)  
+A Voat application that searches Voat content, and upon finding a match for user provided regex pattern(s) constructs a post and response.  
+
+User defined attributes:  
+- *target_content*  is a list of one or more subverses that the bot will read and write content to and from.  
+&nbsp;&nbsp;&nbsp;&nbsp;`vapp.target_subverse = [<subverse>, <subverse>, ...]`  
+  
+Though very simple in principle, it is possible to produce relatively robust behavior. The most basic type of Response Bot, sometimes called a Spam Bot, searches user submitted text for a regex and posts a predetermined response whenever it finds a match. The easiest way too add depth to this behavior is to eliminate 
+
+A Vapp Response Bot principally uses two dictionaries to define its behavior: *patterns* and *responses*.
+
+`patterns = {[<regex>,]: [<response_key>,]}`  
+`responses = {<response_key>: [String,]}`
+
+
+An example demonstrating the simplicity of setting up a Response Bot application.
+
+```
+class GreeterBot(ResponseBot):
+    self.target_subverse = ["introductions"]
+    self.target_content = "text submissions"
+    self.head = None
+    self.tail = "Don't forget to comment and start earning CCP."
+    self.signature = "I am a bot."
+    patterns = {
+    	["[r|R]eddit", "that other site"]: ["reddit", "general"],
+        ["[s|S]tar [t|T]rek", "[s|S]tar [w|W]ars"]: ["llp"]
+    }
+    responses = {
+    	"llp": ["Welcome to Voat! Live long and propser."],
+		"general": [
+        	"Welcome to Voat! Don't forget about /v/ideasforvoat.",
+			"Welcome aboard!"
+        ],
+		"reddit": [
+        	"Welcome to Voat, your safe space from safe spaces.",
+			"Welcome to Voat! You have chosen wisely."
+        ]
+    }
+```
+
+The applicaiton can be run from the command line:
+
+`$ python3 GreeterBot.py`  
