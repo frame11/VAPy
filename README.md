@@ -177,10 +177,21 @@ Accept a subverse name as a string and return the appropriate subverse informati
 
 ##Vapp - Voat Application Framework  
 
-The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup.
+The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup. Additionally, because of the functional approach of VAPy, Vapp features can generally be modified by the insertion of additional VAPy functions into functions chains without breaking tests. For those seeking to maintain mximum test coverage, the process of adding/modifying the test code should be straight forward. I realize it may not be, but it should.  
 
-Vapp applicaitons use [SQLite3](https://www.sqlite.org/) for local data persistence.
+As an example:
 
+Vapp provides built in logging with the Records module. Records manages an [SQLite3](https://www.sqlite.org/) database for each application, providing "hands-off" local data persistence to the user.  
+
+While all efforts have been used to create or use any new jargon (other than the project names themselves) in VAPy and Vapp, the one thing that could not be avoided was the use of, and therefore need to enumerate and define some keywords. All efforts have been made to use self-defining keywords.
+
+######Types of content:
+- **text submission titles** and **link submission titles**
+- **text submission content** and **link submission content**, which is always a url
+- **comments**
+- **titles** is all submission titles, regardless of type
+- **text** is text submission titles and content and comments
+- **all**
 
 
 ###Class Hierarchy  
@@ -188,13 +199,23 @@ Vapp applicaitons use [SQLite3](https://www.sqlite.org/) for local data persiste
 ####Vapp()  
 Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initializes the Records class which provides local data persistence for the applicaiton.  
 
-config.json attributes:  
+user defined config.json attributes:  
+- *app_name* is the name of the applicaiton
 - *target_subverse*  is a list of one or more subverses (strings) that the application will read and write content to and from.  
-- *nsfw* is a boolean value. If False, the application ignores all NSFW flagged content. **NOTE** This does not cause posts by the bot to be flagged NSFW.  
-- *adult_app* is a boolean value. If True, all posts by application are flagged NSFW.
+- *target_content* is a list of string values determining which forms of content to look at.   
+
+  
+predefined config.json attributes:  
+- *nsfw* is a boolean value, default False. If False, the application ignores all NSFW flagged content.  
+- *adult_app* is a boolean value, default False. If True, all posts by application are flagged NSFW.  
+- *store_view_cache* is a boolean value, default False. If True, view cache is persistent across sesssions.
+- 
+
 
 ####Response Bot(Vapp)  
 A Voat application that searches Voat content, and upon finding a match for user provided regex pattern(s) constructs a post and response.  
+
+
 
 config.json attributes:  
 - *target_content*  is a list of one or more subverses that the bot will read and write content to and from.  
