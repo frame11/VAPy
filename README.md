@@ -183,9 +183,11 @@ Tests run rather slow because of the overhead on decrypting OAuth2 credentials f
  
 ##Vapp - Voat Application Framework  
 
-The Vapp framework attempt to make it easy for people to make simple Voat applications. More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application. Vapp applicaitons are intended to be usable with the bare minimum of user configuration while at the same tiime offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup. Additionally, because of the functional approach of VAPy, Vapp features can generally be modified by the insertion of additional VAPy functions into functions chains without breaking tests. For those seeking to maintain mximum test coverage, the process of adding/modifying the test code should be straight forward. I realize it may not be, but it should.  
+The Vapp framework attempt to make it easy for people to make simple Voat applications. ~~More importantly, Vapp is designed to create Voat applications by combining multiple smaller Vapp applications into a single application.~~ *Maybe instead of pluggable apps into a parent class, apps can have pluggable actions like "respond", "upvote", etc.* 
+  
+Vapp applications are intended to be usable with the bare minimum of user configuration while at the same time offering the ability for users to fine tune as many aspects of application behavior as possible without having to make and changes to the code. This allows (in theory) for Vapp apps to come with decent unit test coverage that will remain functional after user setup. Additionally, because of the functional approach of VAPy, Vapp features can generally be modified by the insertion of additional VAPy functions into functions chains without breaking tests. For those seeking to maintain mximum test coverage, the process of adding/modifying the test code should be straight forward. I realize it may not be, but it should.  
 
-As an example:
+Users setup app behavior with json configuration files.
 
 Vapp provides built in logging with the Records module. Records manages an [SQLite3](https://www.sqlite.org/) database for each application, providing "hands-off" local data persistence to the user.  
 
@@ -202,7 +204,7 @@ While all efforts have been used to create or use any new jargon (other than the
 - **text** is text submission titles and content and comments
 - **all**
 
-
+**NOTE** on names: VAPy methods use names derived strictly from the Voat API, such as "content submission" while Vapp uses method names which attempt to 
 ###Class Hierarchy  
 
 ####Vapp()  
