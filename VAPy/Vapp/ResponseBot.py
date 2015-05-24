@@ -7,9 +7,6 @@ class ResponseBot(Vapp):
 
 
     def run(self):
-
-        content = [self.get_content(subverse, self.target_content) for subverse in self.subverses]
-
-
+        pass
 
 
