@@ -16,7 +16,19 @@ class Vapp(object):
         self.app_dir = "./"
         self.nsfw = False
         self.subverses = []
-        
+
+        self.getter_lookups = {
+            "text submission titles": self.get_text_submission_titles,
+            "link submission titles": self.get_link_submission_titles,
+            "text submission content": self.get_text_submission_content,
+            "link submission content": self.get_link_submission_content,
+            "comments to text submissions": self.get_comments_to_text_submissions,
+            "comments to link submissions": self.get_comments_to_link_submissions,
+            "comments": self.get_comments,
+            "titles": self.get_titles,
+            "text": self.get_text,
+            "all": self.get_all
+        }
         
         self.load_config()
         if not self.validate_config_load():
@@ -81,9 +93,6 @@ class Vapp(object):
     def get_all(self, subverse):
         return self.get_text(subverse) + self.get_link_submission_content(subverse)
 
-
-
-
-    def get_content_by_type(self, c_types):
-        for c_type in c_types
-        if c_type == 
+    def get_content(self, subverse, c_types):
+        return [get_attr(self, getter_lookups[c_type])(subverse) for c_type in c_types]
+        
