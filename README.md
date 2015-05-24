@@ -201,7 +201,7 @@ While all efforts have been used to create or use any new jargon (other than the
 ######Special content keywords
 - **comments** is all comments
 - **titles** is all submission titles, regardless of type
-- **text** is text submission titles and content and comments
+- **text** is everything but link submission content
 - **all**
 
 **NOTE** on names: VAPy methods use names derived strictly from the Voat API, such as "content submission" while Vapp uses method names which attempt to 
