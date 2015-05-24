@@ -8,9 +8,8 @@ class ResponseBot(Vapp):
 
     def run(self):
 
-        for subverse in self.target_subverses:
-            
-            submissions = self.vapy.submissions_from_subverse(subverse)
+        content = [self.get_content(subverse, self.target_content) for subverse in self.subverses]
+
 
 
 

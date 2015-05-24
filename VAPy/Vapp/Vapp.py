@@ -12,10 +12,12 @@ class Vapp(object):
 
     def __init__(self):
 
+        #attributes to be populated from config.json
         self.app_name = ""        
         self.app_dir = "./"
         self.nsfw = False
         self.subverses = []
+        self.target_content = []
 
         self.getter_lookups = {
             "text submission titles": self.get_text_submission_titles,
