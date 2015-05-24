@@ -191,10 +191,13 @@ Vapp provides built in logging with the Records module. Records manages an [SQLi
 
 While all efforts have been used to create or use any new jargon (other than the project names themselves) in VAPy and Vapp, the one thing that could not be avoided was the use of, and therefore need to enumerate and define some keywords. All efforts have been made to use self-defining keywords.
 
-######Types of content:
+######Content keywords:
 - **text submission titles** and **link submission titles**
 - **text submission content** and **link submission content**, which is always a url
-- **comments**
+- **comments to text submissions** and **comments to link submissions**
+
+######Special content keywords
+- **comments** is all comments
 - **titles** is all submission titles, regardless of type
 - **text** is text submission titles and content and comments
 - **all**
