@@ -126,8 +126,8 @@ class VAPy:
         r.connection.close()
 
     def post_reply_to_comment(self, comment_id, comment):
-        submission_id = self.get_comment_submission(self.comment_dict_from_id(comment_id))
-        subverse = self.get_submission_subverse(self.submission_dict_from_id(submission_id))
+        submission_id = self.get_comment_submission(self.comment_from_id(comment_id))
+        subverse = self.get_submission_subverse(self.submission_from_id(submission_id))
         url = API_URL + 'v/{}/{}/comment/{}'.format(subverse, submission_id, comment_id)
         body = json.dumps({'Value':comment})
         r = requests.post(url, headers=self.headers, data=body)
@@ -139,33 +139,47 @@ class VAPy:
         r = requests.post(url, headers=self.headers, data=body)
         r.connection.close()
     
+    # SUBVERSE GETTER
+
+    def get_subverse(self, subverse):
+        submissions = self.get_submissions_by_subverse(subverse)
+        return {submission:self.get_comments_to_submission(self.get_id(sub)) for sub in submissions}
+
+
+
     # SUBMISSION GETTERS
 
-    def submission_dict_from_id(self, submission_id):
+    def get_submission_by_id(self, submission_id):
         url = API_URL + 'submissions/{}'.format(submission_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    def submission_dicts_from_subverse(self, subverse):
+    def get_submissions_by_subverse(self, subverse):
         url = API_URL + 'v/{}'.format(subverse)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
         return resp['data'] if resp['success'] == True else []
 
+    def get_content_submissions_by_subverse(self, subverse):
+        return filter(self.is_content_submission, self.get_submissions_by_subverse(subverse))
+
+    def get_url_submissions_by_subverse(self, subverse):
+        return filter(self.is_url_submission, self.get_submissions_by_subverse(subverse))
+
     # COMMENT GETTERS
 
-    def comment_dict_from_id(self, comment_id):
+    def get_comment_by_id(self, comment_id):
         url = API_URL + 'comments/{}'.format(comment_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    def comment_dicts_from_submission(self, submission_id):
-        subverse = self.get_subverse(self.submission_dict_from_id(submission_id))
+    def get_comments_to_submission(self, submission_id):
+        subverse = self.get_subverse(self.get_submission_by_id(submission_id))
         url = API_URL + 'v/{}/{}/comments'.format(subverse, submission_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
@@ -175,115 +189,118 @@ class VAPy:
     # VOAT DICT FUNCS
     
     @catch_empty_input
-    def get_content(self, voat_dict, ignore_links=False):
-        if (voat_dict != {}) and (ignore_links == True):
-            return voat_dict['content']
-        elif (voat_dict != {}) and (ignore_links == False):
-            if self.is_url_submission(voat_dict):
-                return voat_dict['url']
+    def get_content(self, voat, ignore_links=False):
+        if (voat != {}) and (ignore_links == True):
+            return voat['content']
+        elif (voat != {}) and (ignore_links == False):
+            if self.is_url_submission(voat):
+                return voat['url']
             else:
-                return voat_dict['content']
+                return voat['content']
         else:
             return {}
 
     @catch_empty_input
-    def get_subverse(self, voat_dict):
-        if self.is_submission(voat_dict):        
-            return voat_dict['subverse']
+    def get_subverse(self, voat):
+        if self.is_submission(voat):        
+            return voat['subverse']
         else:
-            submission_id = self.get_comment_submission(voat_dict)
-            #return self.get_subverse(self.submission_dict_from_id(submission_id))
-            return self.submission_dict_from_id(submission_id)['subverse']
+            submission_id = self.get_comment_submission(voat)
+            #return self.get_subverse(self.submission_from_id(submission_id))
+            return self.get_submission_by_id(submission_id)['subverse']
 
     @catch_empty_input
-    def get_author(self, voat_dict):
-        return voat_dict['userName']
+    def get_author(self, voat):
+        return voat['userName']
 
     @catch_empty_input
-    def get_scores(self, voat_dict):
-        return voat_dict['upVotes'], voat_dict['downVotes']
+    def get_scores(self, voat):
+        return voat['upVotes'], voat['downVotes']
 
     @catch_empty_input
-    def get_score(self, voat_dict):
-        if voat_dict != {}:
-            up, down = self.get_scores(voat_dict)
+    def get_score(self, voat):
+        if voat != {}:
+            up, down = self.get_scores(voat)
             return up - down
         else:
             return {}
 
     @catch_empty_input
-    def get_date(self, voat_dict):
-        return voat_dict['date']
+    def get_date(self, voat):
+        return voat['date']
 
     @catch_empty_input
-    def get_id(self, voat_dict):
-        return voat_dict['id']
+    def get_id(self, voat):
+        return voat['id']
 
     @catch_empty_input
-    def get_permalink(self, voat_dict):
-        if self.is_submission(voat_dict):
+    def get_permalink(self, voat):
+        if self.is_submission(voat):
             return "https://fakevout.azurewebsites.net/v/{}/comments/{}".format(
-                    self.get_subverse(voat_dict), self.get_id(voat_dict))
+                    self.get_subverse(voat), self.get_id(voat))
 
     # SUBMISSION DICT FUNCS
 
     @catch_empty_input
-    def get_submission_type(self, submission_dict):
-        return 'content' if submission_dict['type'] == 1 else 'url'
+    def get_submission_type(self, submission):
+        return 'content' if submission['type'] == 1 else 'url'
 
     @catch_empty_input
-    def get_submission_title(self, submission_dict):
-        return submission_dict['title']
+    def get_submission_title(self, submission):
+        return submission['title']
 
     @catch_empty_input
-    def get_submission_rank(self, submission_dict):
-        return float(submission_dict['rank'])
+    def get_submission_rank(self, submission):
+        return float(submission['rank'])
 
     @catch_empty_input
-    def get_submission_comment_count(self, submission_dict):
-        return int(submission_dict['commentCount'])
+    def get_submission_comment_count(self, submission):
+        return int(submission['commentCount'])
 
     # COMMENT DICT FUNCS
 
     @catch_empty_input
-    def get_comment_submission(self, comment_dict):
-        return comment_dict['submissionID']
+    def get_comment_submission(self, comment):
+        return comment['submissionID']
 
-    def get_parent_id(self, comment_dict):
-        return comment_dict['parentID']
+    def get_parent_id(self, comment):
+        return comment['parentID']
 
     # FILTERS
 
-    def is_submission(self, voat_dict):
-        return True if 'type' in voat_dict.keys() else False
+    def is_submission(self, voat):
+        return True if 'type' in voat.keys() else False
 
-    def is_comment(self, voat_dict):
-        return True if 'parentID' in voat_dict.keys() else False
+    def is_comment(self, voat):
+        return True if 'parentID' in voat.keys() else False
 
-    def is_content_submission(self, submission_dict):
-        return True if self.get_submission_type(submission_dict) == 'content' else False
+    def is_content_submission(self, submission):
+        return True if self.get_submission_type(submission) == 'content' else False
 
-    def is_url_submission(self, submission_dict):
-        return True if self.get_submission_type(submission_dict) == 'url' else False
+    def is_url_submission(self, submission):
+        return True if self.get_submission_type(submission) == 'url' else False
 
-    def contains_regex(self, regex, voat_dict, ignore_links=False):
+    def contains_regex(self, regex, voat, ignore_links=False):
         if ignore_links == False:
-            return True if ( self.contains_regex_in_title(regex, voat_dict) or self.contains_regex_in_content(regex, voat_dict) ) else False
+            return True if ( self.contains_regex_in_title(regex, voat) or self.contains_regex_in_content(regex, voat) ) else False
         else:
-            return True if ( self.contains_regex_in_title(regex, voat_dict) or self.contains_regex_in_content(regex, voat_dict, ignore_links=True) ) else False
+            return True if ( self.contains_regex_in_title(regex, voat) or self.contains_regex_in_content(regex, voat, ignore_links=True) ) else False
 
     @catch_empty_filter_input   
-    def contains_regex_in_title(self, regex, submission_dict):
-        return bool(re.search(regex, self.get_submission_title(submission_dict))) 
+    def contains_regex_in_title(self, regex, submission):
+        return bool(re.search(regex, self.get_submission_title(submission))) 
    
     @catch_empty_filter_input
-    def contains_regex_in_content(self, regex, voat_dict):
-        return bool(re.search(regex, self.get_content(voat_dict)))
+    def contains_regex_in_content(self, regex, voat):
+        return bool(re.search(regex, self.get_content(voat)))
    
     @catch_empty_filter_input
-    def contains_regex_in_link(self, regex, submission_dict):
-        return bool(re.search(regex, self.get_submission_link(submission_dict)))
+    def contains_regex_in_link(self, regex, submission):
+        return bool(re.search(regex, self.get_content(submission)))
 
     @catch_empty_filter_input
-    def is_top_level_comment(self, comment_dict):
-        return bool(comment_dict['parentID'])
+    def is_top_level_comment(self, comment):
+        return bool(comment['parentID'])
+
+
+

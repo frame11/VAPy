@@ -51,174 +51,174 @@ class VAPyTests(unittest.TestCase):
     # VOAT DICT FUNCTIONS
     
     def test_get_text_submission_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(209)), 'testicular') 
+        self.assertEqual(self.vapy.get_content(self.vapy.get_submission_by_id(209)), 'testicular') 
 
     def test_get_text_submission_content_with_ignore_links(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(209), ignore_links=True), 'testicular')
+        self.assertEqual(self.vapy.get_content(self.vapy.get_submission_by_id(209), ignore_links=True), 'testicular')
     
     def test_get_requested_url_submission_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(211)), 'https://github.com/frame11/VAPy')
+        self.assertEqual(self.vapy.get_content(self.vapy.get_submission_by_id(211)), 'https://github.com/frame11/VAPy')
 
     def test_get_invalid_submission_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_content(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_comment_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.comment_dict_from_id(2635)), 'attempt')
+    def test_get_get_comment_content(self):
+        self.assertEqual(self.vapy.get_content(self.vapy.get_comment_by_id(2635)), 'attempt')
 
-    def test_get_invalid_comment_content(self):
-        self.assertEqual(self.vapy.get_content(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_content(self):
+        self.assertEqual(self.vapy.get_content(self.vapy.get_comment_by_id(99999999)), {})
 
     def test_get_valid_submission_subverse(self):
-        self.assertEqual(self.vapy.get_subverse(self.vapy.submission_dict_from_id(209)), 'frame11')
+        self.assertEqual(self.vapy.get_subverse(self.vapy.get_submission_by_id(209)), 'frame11')
 
     def test_get_invalid_submission_subverse(self):
-        self.assertEqual(self.vapy.get_subverse(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_subverse(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_valid_comment_subverse(self):
-        self.assertEqual(self.vapy.get_subverse(self.vapy.comment_dict_from_id(2635)), 'frame11')
+    def test_get_valid_get_comment_subverse(self):
+        self.assertEqual(self.vapy.get_subverse(self.vapy.get_comment_by_id(2635)), 'frame11')
 
-    def test_get_invalid_comment_subverse(self):
-        self.assertEqual(self.vapy.get_subverse(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_subverse(self):
+        self.assertEqual(self.vapy.get_subverse(self.vapy.get_comment_by_id(99999999)), {})
 
     def test_get_valid_submission_author(self):
-        self.assertEqual(self.vapy.get_author(self.vapy.submission_dict_from_id(209)), 'frame11')
+        self.assertEqual(self.vapy.get_author(self.vapy.get_submission_by_id(209)), 'frame11')
     
     def test_get_invalid_submission_author(self):
-        self.assertEqual(self.vapy.get_author(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_author(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_valid_comment_author(self):
-        self.assertEqual(self.vapy.get_author(self.vapy.comment_dict_from_id(2635)), 'frame11')
+    def test_get_valid_get_comment_author(self):
+        self.assertEqual(self.vapy.get_author(self.vapy.get_comment_by_id(2635)), 'frame11')
     
-    def test_get_invalid_comment_author(self):
-        self.assertEqual(self.vapy.get_author(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_author(self):
+        self.assertEqual(self.vapy.get_author(self.vapy.get_comment_by_id(99999999)), {})
         
     def test_get_valid_submission_scores(self):
-        self.assertEqual(self.vapy.get_scores(self.vapy.submission_dict_from_id(213)), (3, 1))
+        self.assertEqual(self.vapy.get_scores(self.vapy.get_submission_by_id(213)), (3, 1))
 
     def test_get_invalid_submission_scores(self):
-        self.assertEqual(self.vapy.get_scores(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_scores(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_valid_comment_scores(self):
-        self.assertEqual(self.vapy.get_scores(self.vapy.comment_dict_from_id(2635)), (1, 0))
+    def test_get_valid_get_comment_scores(self):
+        self.assertEqual(self.vapy.get_scores(self.vapy.get_comment_by_id(2635)), (1, 0))
 
-    def test_get_invalid_comment_scores(self):
-        self.assertEqual(self.vapy.get_scores(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_scores(self):
+        self.assertEqual(self.vapy.get_scores(self.vapy.get_comment_by_id(99999999)), {})
         
     def test_get_valid_submission_score(self):
-        self.assertEqual(self.vapy.get_score(self.vapy.submission_dict_from_id(213)), 2)
+        self.assertEqual(self.vapy.get_score(self.vapy.get_submission_by_id(213)), 2)
     
     def test_get_invalid_submission_score(self):
-        self.assertEqual(self.vapy.get_score(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_score(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_valid_comment_score(self):
-        self.assertEqual(self.vapy.get_score(self.vapy.comment_dict_from_id(2635)), 1)
+    def test_get_valid_get_comment_score(self):
+        self.assertEqual(self.vapy.get_score(self.vapy.get_comment_by_id(2635)), 1)
 
-    def test_get_invalid_comment_score(self):
-        self.assertEqual(self.vapy.get_score(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_score(self):
+        self.assertEqual(self.vapy.get_score(self.vapy.get_comment_by_id(99999999)), {})
 
     def test_get_valid_submission_date(self):
-        self.assertEqual(self.vapy.get_date(self.vapy.submission_dict_from_id(209)), '2015-05-07T08:41:44.067')
+        self.assertEqual(self.vapy.get_date(self.vapy.get_submission_by_id(209)), '2015-05-07T08:41:44.067')
 
     def test_get_invalid_submission_date(self):
-        self.assertEqual(self.vapy.get_date(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_date(self.vapy.get_submission_by_id(99999999)), {})
     
-    def test_get_valid_comment_date(self):
-        self.assertEqual(self.vapy.get_date(self.vapy.comment_dict_from_id(2635)), '2015-05-08T19:17:51.9')
+    def test_get_valid_get_comment_date(self):
+        self.assertEqual(self.vapy.get_date(self.vapy.get_comment_by_id(2635)), '2015-05-08T19:17:51.9')
 
-    def test_get_invalid_comment_date(self):
-        self.assertEqual(self.vapy.get_date(self.vapy.comment_dict_from_id(99999999)), {})
+    def test_get_invalid_get_comment_date(self):
+        self.assertEqual(self.vapy.get_date(self.vapy.get_comment_by_id(99999999)), {})
 
     # SUBMISSION DICT FUNCTIONS
 
     def test_get_text_submission_type(self):
-        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(209)), 'content')
+        self.assertEqual(self.vapy.get_submission_type(self.vapy.get_submission_by_id(209)), 'content')
         
     def test_get_link_submission_type(self):
-        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(211)), 'url')
+        self.assertEqual(self.vapy.get_submission_type(self.vapy.get_submission_by_id(211)), 'url')
         
     def test_get_invalid_submission_type(self):
-        self.assertEqual(self.vapy.get_submission_type(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_submission_type(self.vapy.get_submission_by_id(99999999)), {})
 
     def test_get_valid_submission_title(self):
-        self.assertEqual(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(209)), 'testicular')
+        self.assertEqual(self.vapy.get_submission_title(self.vapy.get_submission_by_id(209)), 'testicular')
         
     def test_get_invalid_submission_title(self):
-        self.assertEqual(self.vapy.get_submission_title(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_submission_title(self.vapy.get_submission_by_id(99999999)), {})
 
     def test_get_submission_rank(self):
-        self.assertEqual(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(213)), 0.172865)
+        self.assertEqual(self.vapy.get_submission_rank(self.vapy.get_submission_by_id(213)), 0.172865)
 
     def test_get_invalid_submission_rank(self):
-        self.assertEqual(self.vapy.get_submission_rank(self.vapy.submission_dict_from_id(99999999)), {})
+        self.assertEqual(self.vapy.get_submission_rank(self.vapy.get_submission_by_id(99999999)), {})
 
-    def test_get_valid_submission_comment_count(self):
-        self.assertEqual(self.vapy.get_submission_comment_count(self.vapy.submission_dict_from_id(213)), 3)
+    def test_get_valid_submission_get_comment_count(self):
+        self.assertEqual(self.vapy.get_submission_comment_count(self.vapy.get_submission_by_id(213)), 3)
 
-    def test_get_invalid_submission_comment_count(self):
-        self.assertEqual(self.vapy.get_submission_comment_count(self.vapy.submission_dict_from_id(99999999)), {})
+    def test_get_invalid_submission_get_comment_count(self):
+        self.assertEqual(self.vapy.get_submission_comment_count(self.vapy.get_submission_by_id(99999999)), {})
 
 
     # FILTER TESTS
 
     def test_pos_valid_submission_contains_regex_in_title(self):
-        self.assertTrue(self.vapy.contains_regex_in_title('test', self.vapy.submission_dict_from_id(209)))
+        self.assertTrue(self.vapy.contains_regex_in_title('test', self.vapy.get_submission_by_id(209)))
 
     def test_neg_valid_submission_contains_regex_in_title(self):
-        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(209)))
+        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.get_submission_by_id(209)))
 
     def test_invalid_submission_contains_regex_in_title(self):
-        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.submission_dict_from_id(99999999)))
+        self.assertFalse(self.vapy.contains_regex_in_title('pasta', self.vapy.get_submission_by_id(99999999)))
 
     def test_pos_valid_text_submission_contains_regex_in_content(self):
-        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.submission_dict_from_id(213)))
+        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.get_submission_by_id(213)))
 
     def test_neg_valid_text_submission_contains_regex_in_content(self):
-        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.submission_dict_from_id(213)))
+        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.get_submission_by_id(213)))
 
     def test_pos_valid_link_submission_contains_regex_in_content(self):
-        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.submission_dict_from_id(213)))
+        self.assertTrue(self.vapy.contains_regex_in_content('test', self.vapy.get_submission_by_id(213)))
 
     def test_neg_valid_link_submission_contains_regex_in_content(self):
-        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.submission_dict_from_id(213)))
+        self.assertFalse(self.vapy.contains_regex_in_content('pasta', self.vapy.get_submission_by_id(213)))
     
     def test_pos_valid_link_submission_contains_regex_in_link(self):
-        self.assertTrue(self.vapy.contains_regex_in_link('github', self.vapy.submission_dict_from_id(211)))
+        self.assertTrue(self.vapy.contains_regex_in_link('github', self.vapy.get_submission_by_id(211)))
     
     def test_neg_valid_link_submission_contains_regex_in_link(self):
-        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.submission_dict_from_id(211)))
+        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.get_submission_by_id(211)))
 
     def test_valid_text_submission_contains_regex_in_link(self):
-        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.submission_dict_from_id(209)))
+        self.assertFalse(self.vapy.contains_regex_in_link('pasta', self.vapy.get_submission_by_id(209)))
 
     def test_invalid_submission_contains_regex_in_link(self):
-        self.assertFalse(self.vapy.contains_regex_in_link('github', self.vapy.submission_dict_from_id(99999999)))
+        self.assertFalse(self.vapy.contains_regex_in_link('github', self.vapy.get_submission_by_id(99999999)))
 
     def test_pos_in_title_valid_submission_contains_regex(self):
-        self.assertTrue(self.vapy.contains_regex('test', self.vapy.submission_dict_from_id(209)))
+        self.assertTrue(self.vapy.contains_regex('test', self.vapy.get_submission_by_id(209)))
 
     def test_pos_in_text_content_valid_submission_contains_regex(self):
-        self.assertTrue(self.vapy.contains_regex('test', self.vapy.submission_dict_from_id(213)))
+        self.assertTrue(self.vapy.contains_regex('test', self.vapy.get_submission_by_id(213)))
 
     def test_pos_in_link_content_valid_submission_contains_regex(self):
-        self.assertTrue(self.vapy.contains_regex('github', self.vapy.submission_dict_from_id(211)))
+        self.assertTrue(self.vapy.contains_regex('github', self.vapy.get_submission_by_id(211)))
 
     def test_pos_in_both_valid_submission_contains_regex(self):
-        self.assertTrue(self.vapy.contains_regex('not', self.vapy.submission_dict_from_id(213)))
+        self.assertTrue(self.vapy.contains_regex('not', self.vapy.get_submission_by_id(213)))
 
     def test_neg_valid_submission_contains_regex(self):
-        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.submission_dict_from_id(213)))
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.get_submission_by_id(213)))
     
     def test_invalid_submission_contains_regex(self):
-        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.submission_dict_from_id(99999999)))
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.get_submission_by_id(99999999)))
 
-    def test_pos_valid_comment_contains_regex(self):
-        self.assertTrue(self.vapy.contains_regex('spin', self.vapy.comment_dict_from_id(2609)))
+    def test_pos_valid_get_comment_contains_regex(self):
+        self.assertTrue(self.vapy.contains_regex('spin', self.vapy.get_comment_by_id(2609)))
 
-    def test_neg_valid_comment_contains_regex(self):
-        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.comment_dict_from_id(2609)))
+    def test_neg_valid_get_comment_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.get_comment_by_id(2609)))
 
-    def test_invalid_comment_contains_regex(self):
-        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.comment_dict_from_id(99999999)))
+    def test_invalid_get_comment_contains_regex(self):
+        self.assertFalse(self.vapy.contains_regex('pasta', self.vapy.get_comment_by_id(99999999)))
 
 
 
