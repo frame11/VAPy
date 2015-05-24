@@ -42,3 +42,48 @@ class Vapp(object):
                        len(self.subverses) > 0
                        ) else False
 
+
+    # Content getters
+
+    def get_text_submission_titles(self, subverse):
+        text_submissions = filter(self.vapy.is_content_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [self.vapy.get_title(sub_dict) for sub_dict in text_submissions]
+
+    def get_link_submission_titles(self, subverse):
+        link_submissions = filter(self.vapy.is_link_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [self.vapy.get_title(sub_dict) for sub_dict in link_submissions)]
+
+    def get_text_submission_content(self, subverse):
+        text_submissions = filter(self.vapy.is_content_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [self.vapy.get_content(sub_dict) for sub_dict in text_submissions] 
+    
+    def get_link_submission_content(self, subverse):
+        link_submissions = filter(self.vapy.is_link_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [self.vapy.get_content(sub_dict) for sub_dict in link_submissions]
+
+    def get_comments_to_text_submissions(self, subverse):
+        text_submissions = filter(self.vapy.is_content_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [com_dict for com_dict in self.vapy.comment_dicts_from_submission(sub) for sub in text_submissions] 
+
+    def get_comments_to_link_submissions(self, subverse):
+        link_submissions = filter(self.vapy.is_link_submissions, self.vapy.submission_dicts_from_subverse(subverse))
+        return [com_dict for com_dict in self.vapy.comment_dicts_from_submission(sub) for sub in link_submissions] 
+
+    def get_comments(self, subverse):
+        return self.get_comments_to_text_submissions(subverse) + self.get_comments_to_link_submissions(subverse)
+
+    def get_titles(self, subverse):
+        return self.get_text_submission_titles(subverse) + self.get_link_submission_titles(subverse)
+
+    def get_text(self, subverse):
+        return self.get_comments(subverse) + self.get_titles(subverse) + self.get_text_submission_content(subverse)
+
+    def get_all(self, subverse):
+        return self.get_text(subverse) + self.get_link_submission_content(subverse)
+
+
+
+
+    def get_content_by_type(self, c_types):
+        for c_type in c_types
+        if c_type == 
