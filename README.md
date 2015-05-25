@@ -6,18 +6,18 @@
 
 ###CONTENTS
 
-1. [About](###ABOUT)  
-2. Getting Started  
-2.1. Initializing VAPy  
-3. VAPy Methods  
-3.1. Voat Content Dictionaries  
-3.2. Dictionary Methods  
-3.3. Filter Methods  
-3.4. Post Methods  
-3.5. Edit Methods  
-3.6. Delete Methods  
-3.7. Subverse Information Methods  
-4. Tests  
+1. [About](#about)  
+2. [Getting Started](#getting-started)  
+2.1. [Initializing VAPy](#initializing-vapy)  
+3. [VAPy Methods](#vapy-methods)  
+3.1. [Voat Content Dictionaries](#voat-content-dictionaries)  
+3.2. [Dictionary Methods](#dictionary-methods)  
+3.3. [Filter Methods](#filter-methods)  
+3.4. [Post Methods](#post-methods)  
+3.5. [Edit Methods](#edit-methods)  
+3.6. [Delete Methods](#delete-methods)  
+3.7. [Subverse Information Methods](#subverse-information-methods)  
+4. [Tests](#tests)  
 
 
 ###ABOUT  
