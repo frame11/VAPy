@@ -12,6 +12,8 @@ While Python wrappers for other APIs are typically centered around Submission an
 
 VAPy provides a Profiles class, which can be run as a stand alone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. This gives users a "setup and ignore" approach to OAuth2 authentication. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
 
+VAPy includes [Vapp](#vapp---voat-application-framework), a Voat application framework designed to make it even easier to implement simple applications using VAPy.
+
 
 
 ---
@@ -59,6 +61,16 @@ After setting the headers attribute, VAPy functions will work regardless of the 
 #####Voat Content Dictionaries
 Most VAPy functions take a voat content dicitonary as an argument. This is the Python dict corresponding to the json data of the API response to a GET query for a submission or comment.  
 
+######Sample submission_dict
+```
+
+```  
+
+######Sample comment_dict
+```
+
+```  
+
 **get_subverse(**subverse**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a dictionary of {submission_dict: [comment_dicts],...}
 
@@ -79,7 +91,7 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 
 **get_comments_by_submission(**submissionID**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a list comments dictionaries.
-
+  
 
 #####Dictionary Methods  
 Returns values from (or calculated from) Voat content dictionaries.  
@@ -186,3 +198,107 @@ Accept a subverse name as a string and return the appropriate subverse informati
 VAPy methods are covered by tests.py, which uses Profiles for OAuth2 management. To run tests.py it is necessary to create a valid profile with the profile name "test". Alternatively, the user can alter the load_profile() call of VAPyTests.setUp() to load any profile desired.
 
 Tests run rather slow because of the overhead on decrypting OAuth2 credentials for each VAPy instance. The values could get loaded into a holder in the setUpClass() call, and then passed to the VAPy isntance with setHeader() rather than using load_profile(). This should greatly reduce testing time.
+
+
+##Vapp - Voat Application Framework  
+
+The Vapp framework attempt to make it easy for people to make simple Voat applications.
+
+###Class Hierarchy  
+
+####Vapp()  
+Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initializes the Records class which provides local data persistence for the applicaiton.  
+
+user defined config.json attributes:  
+- *app_name* is the name of the applicaiton
+- *subverses*  is a list of one or more subverses (strings) that the application will read and write content to and from.  
+
+  
+predefined config.json attributes:  
+- *nsfw* is a boolean value, default False. If False, the application ignores all NSFW flagged content.  
+- *adult_app* is a boolean value, default False. If True, all posts by application are flagged NSFW.   
+- *store_view_cache* is a boolean value, default False. If True, view cache is persistent across sesssions.
+
+####Response Bot(Vapp)  
+A Voat application that searches Voat content, and upon finding a match for user provided regex pattern(s) constructs a post and response.  
+
+
+The Reponse Bot uses five attributes to decide what types of Voat content to search for patterns matches, and which types to ignore.
+
+- *title_patterns*  
+- *content_patterns*  
+- *url_patterns*  
+- *comment_patterns*  
+- *patterns*  
+
+Each attribute is intended to contain a dictionary object:w
+, None, or False. A value of None in any of the first four attributes indicates to search and respond to that content type with the pattern file specified in *patterns*. A value of False indicates to ignore that content type. Logic prohibits certain combinations, and breaking the following rules result in an exception: 
+- *patterns* != True, else all content ignored
+- at least one content type attribure (not *patterns*) must = file_name or None, else all content ignored
+- *patterns* != None if anything else is None
+
+Though very simple in principle, it is possible to produce relatively robust behavior.  
+
+A Vapp Response Bot principally uses two dictionaries to define its behavior: *patterns* and *responses*.
+
+`patterns = {[<regex>,]: [<response_key>,]}`  
+`responses = {<response_key>: [String,]}`
+
+
+#####An example demonstrating a very simple Response Bot application with 4 files.
+######GreeterBot.py
+
+```
+class GreeterBot(ResponseBot):
+	def __init__(self):
+		super(GreeterBot, self).__init__()
+
+def main():
+    greeter = GreeterBot()
+	greeter.run()
+
+if __name__ == '__main__':
+	main()
+```
+######config.json
+```
+{
+    "app_name": "greeterBot",
+	"nsfw": "False",
+    "adult_app": "False",
+	"store_view_cache": "False",
+    "title_patterns": "None",
+	"content_patterns": "None",
+	"url_patterns": "None",
+    "comment_patterns": "None",
+	"patterns": "./patterns.json"
+}
+```
+######patterns.json
+```
+{
+    ["[r|R]eddit", "that other site"]: ["reddit", "general"],
+    ["[s|S]tar [t|T]rek", "[s|S]tar [w|W]ars"]: ["llp"]
+}
+```
+######responses.json
+```
+{
+    "llp": ["Welcome to Voat! Live long and propser."],
+	"general": [
+        "Welcome to Voat! Don't forget about /v/ideasforvoat.",
+		"Welcome aboard!"
+       ],
+	"reddit": [
+        "Welcome to Voat, your safe space from safe spaces.",
+		"Welcome to Voat! You have chosen wisely."
+       ]
+}
+```
+The applicaiton can be run from the command line:
+
+`$ python3 GreeterBot.py`  
+
+The application will prompt the user for the password associated with their Voat account before running.
+
+The bot is now set up to reply to any submission on /v/introductions that mentions Reddit or certain scifi franchises. It welcomes new users, reminds them to comment so they can start earning CCP, and trolls Star Wars fans.
