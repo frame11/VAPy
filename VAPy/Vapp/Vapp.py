@@ -32,10 +32,26 @@ class Vapp(object):
 
 
     def load_config(self):
-        with open('./Vapp/config.json') as cf:
-            config = json.load(cf)
+        with open('./Vapp/config.json') as f:
+            config = json.load(f)
         for key in config.keys():
-            setattr(self, key, config[key])
+            setattr(self, key, self.parse_config_string(config[key]))
+
+
+    def parse_config_string(self, string):
+        if type(string) != str:
+            return string
+        if string == "True":
+            return True
+        elif string == "False":
+            return False
+        elif string == "None":
+            return None
+        elif string.endswith(".json"):
+            with open(string) as f:
+                return json.load(f) 
+        else:
+            return string
 
     def validate_config_load(self):
         return True if (
