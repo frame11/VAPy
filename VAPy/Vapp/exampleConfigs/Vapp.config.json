@@ -1,0 +1,6 @@
+{
+    "app_name": "greeterBot",
+    "subverses": ["introductions"],
+    "nsfw": "False",
+    "adult_app": "False",
+}

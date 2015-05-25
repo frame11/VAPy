@@ -1,0 +1,12 @@
+{
+    "app_name": "greeterBot",
+    "subverses": ["introductions"],
+    "nsfw": "False",
+    "adult_app": "False",
+    "store_view_cache": "False",
+    "title_patterns": "None",
+    "content_patterns": "None",
+    "url_patterns": "None",
+    "comment_patterns": "None",
+    "patterns": "./patterns.json"
+}
