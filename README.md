@@ -6,11 +6,11 @@
 
 ###CONTENTS
 
-1. About  
+1. [About](###ABOUT)  
 2. Getting Started  
 2.1. Initializing VAPy  
 3. VAPy Methods  
-3.1. VAPy Content Dictionaries  
+3.1. Voat Content Dictionaries  
 3.2. Dictionary Methods  
 3.3. Filter Methods  
 3.4. Post Methods  
