@@ -125,7 +125,7 @@ class VAPy:
     def post_reply_to_submission(self, submission_id, comment):
         subverse = self.get_subverse_name(self.get_submission_by_id(submission_id))
         url = API_URL + 'v/{}/{}/comment'.format(subverse, submission_id)
-        body = json.dumps({'Value':comment})
+        body = json.dumps({'value':comment})
         r = requests.post(url, headers=self.headers, data=body)
         resp = json.loads(r.text)
         r.connection.close()
@@ -135,7 +135,7 @@ class VAPy:
         submission_id = self.get_comment_submission(self.comment_from_id(comment_id))
         subverse = self.get_subverse_name(self.get_submission_by_id(submission_id))
         url = API_URL + 'v/{}/{}/comment/{}'.format(subverse, submission_id, comment_id)
-        body = json.dumps({'Value':comment})
+        body = json.dumps({'value':comment})
         r = requests.post(url, headers=self.headers, data=body)
         resp = json.loads(r.text)
         r.connection.close()
@@ -143,12 +143,52 @@ class VAPy:
 
     def post_reply_to_pm(self, pm_id, comment):
         url = API_URL + 'comments/{}'.format(pm_id)
-        body = json.dumps({'Value':comment})
+        body = json.dumps({'value':comment})
         r = requests.post(url, headers=self.headers, data=body)
         resp = json.loads(r.text)
         r.connection.close()
         return resp['data']['id']
-    
+
+    # EDIT CONTENT
+
+    def edit_submission(self, submission_id, title, content):
+        submission = self.get_submission_by_id(submission_id)
+        subverse, s_type = self.get_subverse_name(submission), self.get_submission_type(submission)
+        url = API_URL + 'v/{}/{}'.format(subverse, submission_id)
+        body = json.dumps({'title':title,s_type:content})
+        r = requests.put(url, headers=self.headers, data=body)
+        resp = json.loads(r.text)
+        r.connection.close()
+        return resp['success']
+
+    def edit_comment(self, comment_id, comment):
+        url = API_URL + 'comments/{}'.format(comment_id)
+        body = json.dumps({'value':comment})
+        r = requests.put(url, headers=self.headers, data=body)
+        resp = json.loads(r.text)
+        r.connection.close()
+        return resp['success']
+
+
+    # DELETE CONTENT
+
+    def delete_submission(self, submission_id, title, content):
+        submission = self.get_submission_by_id(submission_id)
+        subverse = self.get_subverse_name(submission)
+        url = API_URL + 'v/{}/{}'.format(subverse, submission_id)
+        r = requests.delete(url, headers=self.headers)
+        resp = json.loads(r.text)
+        r.connection.close()
+        return resp['success']
+
+    def delete_comment(self, comment_id, comment):
+        url = API_URL + 'comments/{}'.format(comment_id)
+        r = requests.delete(url, headers=self.headers)
+        resp = json.loads(r.text)
+        r.connection.close()
+        return resp['success']
+
+
     # SUBVERSE GETTER
 
     def get_subverse(self, subverse):
