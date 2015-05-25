@@ -4,7 +4,23 @@
 #####IN PROGRESS - ALL CLAIMS SUBJECT TO CHANGE
 ---  
 
-####ABOUT  
+###CONTENTS
+
+1. About  
+2. Getting Started  
+2.1. Initializing VAPy  
+3. VAPy Methods  
+3.1. VAPy Content Dictionaries  
+3.2. Dictionary Methods  
+3.3. Filter Methods  
+3.4. Post Methods  
+3.5. Edit Methods  
+3.6. Delete Methods  
+3.7. Subverse Information Methods  
+4. Tests  
+
+
+###ABOUT  
 
 VAPy is intended to provide a simple, highly explicit Python interface to the Voat API.  
 
@@ -17,7 +33,7 @@ VAPy includes [Vapp](#vapp---voat-application-framework), a Voat application fra
 
 
 ---
-####GETTING STARTED  
+###GETTING STARTED  
 To use VAPy you need a valid Voat.co login and api key.  
 
 It is recommended that you first create a profile by running Profiles as a standalone applicaiton:
@@ -56,9 +72,9 @@ After setting the headers attribute, VAPy functions will work regardless of the 
 
 
 ---
-####VAPy METHODS  
+###VAPy METHODS  
 
-#####Voat Content Dictionaries
+####Voat Content Dictionaries
 Most VAPy functions take a voat content dicitonary as an argument. This is the Python dict corresponding to the json data of the API response to a GET query for a submission or comment.  
 
 ######Sample submission_dict
@@ -93,7 +109,7 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a list comments dictionaries.
   
 
-#####Dictionary Methods  
+####Dictionary Methods  
 Returns values from (or calculated from) Voat content dictionaries.  
 
 &nbsp;&nbsp;&nbsp;&nbsp;`user_names = [vapy.get_author(d) for d in some_itr_of_voat_content_dicts]`  
@@ -143,7 +159,7 @@ Some keys are shared between submission and comment dicts while others are uniqu
 &nbsp;&nbsp;&nbsp;&nbsp;Returns the ID of the a comment's parent comment. Returns **None** if comment is for a top-level comment.
 
 
-#####Filter Methods  
+####Filter Methods  
 Intended to be used primarily with filter(), VAPy filter methods accept voat content dictionaries and return a boolean value.  
   
 &nbsp;&nbsp;&nbsp;&nbsp;`main_comments = filter(vapy.is_top_level_comment, itr_of_dicts`  
@@ -163,7 +179,7 @@ Intended to be used primarily with filter(), VAPy filter methods accept voat con
 &nbsp;&nbsp;&nbsp;&nbsp; **True** if comment is directly under submission, **False** is comment is under another comment.
 
 
-#####Post Methods
+####Post Methods
 **post_text_submission(**subverse, title, text**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Submit a new text submission.
 
@@ -179,7 +195,23 @@ Intended to be used primarily with filter(), VAPy filter methods accept voat con
 **post_reply_to_pm(**pm_id, comment**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Submit reply to a personal message.  
 
-#####Subverse Information Methods
+####Edit Methods
+
+**edit_submission(**submission_id, title, content**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Replaces submissions title and content.  
+
+**edit_comment(**comment_id, comment**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Replaces submissions title and content.  
+
+####Delete Methods
+
+**delete_submission(**submission_id**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Replaces submissions title and content.  
+
+**delete_comment(**comment_id**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Replaces submissions title and content.  
+
+####Subverse Information Methods
 Accept a subverse name as a string and return the appropriate subverse information.  
 
 **get_subverse_creation_date(**subverse**)**  
@@ -204,7 +236,6 @@ Tests run rather slow because of the overhead on decrypting OAuth2 credentials f
 
 The Vapp framework attempt to make it easy for people to make simple Voat applications.
 
-###Class Hierarchy  
 
 ####Vapp()  
 Base superclass of the Vapp framework. Initializes VAPy and loads Profile. Initializes the Records class which provides local data persistence for the applicaiton.  
