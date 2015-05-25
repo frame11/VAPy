@@ -217,4 +217,3 @@ user defined config.json attributes:
 predefined config.json attributes:  
 - *nsfw* is a boolean value, default False. If False, the application ignores all NSFW flagged content.  
 - *adult_app* is a boolean value, default False. If True, all posts by application are flagged NSFW.   
-- *store_view_cache* is a boolean value, default False. If True, view cache is persistent across sesssions.
