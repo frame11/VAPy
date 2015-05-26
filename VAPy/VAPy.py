@@ -132,7 +132,7 @@ class VAPy:
         return resp['data']['id']
 
     def post_reply_to_comment(self, comment_id, comment):
-        submission_id = self.get_comment_submission(self.comment_from_id(comment_id))
+        submission_id = self.get_comment_submission(self.get_comment_by_id(comment_id))
         subverse = self.get_subverse_name(self.get_submission_by_id(submission_id))
         url = API_URL + 'v/{}/{}/comment/{}'.format(subverse, submission_id, comment_id)
         body = json.dumps({'value':comment})
@@ -193,7 +193,7 @@ class VAPy:
 
     def get_subverse(self, subverse):
         submissions = self.get_submissions_by_subverse(subverse)
-        return [(submission, self.get_comments_to_submission(self.get_id(sub))) for submission in submissions]
+        return [(submission, self.get_comments_to_submission(self.get_id(submission))) for submission in submissions]
 
 
 
@@ -228,13 +228,17 @@ class VAPy:
         r.connection.close()
         return resp['data'] if resp['success'] == True else {}
 
-    def get_comments_to_submission(self, submission_id):
-        subverse = self.get_subverse_name(self.get_submission_by_id(submission_id))
+    def get_comments_to_submission(self, submission):
+        if type(submission) == int:
+            subverse = self.get_subverse_name(self.get_submission_by_id(submission_id))
+        elif type(submission) == dict:
+            subverse = submission['id']
         url = API_URL + 'v/{}/{}/comments'.format(subverse, submission_id)
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
         return resp['data'] if resp['success'] == True else []
+
 
     # VOAT DICT FUNCS
     
@@ -242,7 +246,7 @@ class VAPy:
     def get_content(self, voat_dict, ignore_links=False):
         if (voat_dict != {}) and (ignore_links == True):
             return voat_dict['content']
-        elif (voat != {}) and (ignore_links == False):
+        elif (voat_dict != {}) and (ignore_links == False):
             if self.is_url_submission(voat_dict):
                 return voat_dict['url']
             else:
