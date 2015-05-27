@@ -1,7 +1,7 @@
 # VAPy
 ###The Voat API wrapper for Python3  
 ---  
-#####IN PROGRESS - ALL CLAIMS SUBJECT TO CHANGE
+#####IN PROGRESS - SUBJECT TO FREQUENT AND RADICAL CHANGES
 ---  
 
 ###CONTENTS
@@ -17,6 +17,9 @@
 3.5. [Edit Methods](#edit-methods)  
 3.6. [Delete Methods](#delete-methods)  
 3.7. [Subverse Information Methods](#subverse-information-methods)  
+3.8. [User Information Methods]()  
+3.9. [Vote Methods]()  
+3.10 [Helpers and Wrappers]()  
 4. [Tests](#tests)  
 
 
@@ -88,7 +91,7 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 ```  
 
 **get_subverse(**subverse**)**  
-&nbsp;&nbsp;&nbsp;&nbsp;Returns a list of [(submission_dict, [comment_dicts]), ...]
+&nbsp;&nbsp;&nbsp;&nbsp;Returns list [(submission_dict, [comment_dicts]), ...]
 
 **get_submission_by_id(**subverse, submissionID**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a submission dictionary.
@@ -106,7 +109,7 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a submission dictionary.
 
 **get_comments_by_submission(**submission, subverse=None**)**  
-&nbsp;&nbsp;&nbsp;&nbsp;Returns a list comments dictionaries. Accepts a submission dict, or submission id and subverse.
+&nbsp;&nbsp;&nbsp;&nbsp;Returns a list of comments dictionaries. Accepts a submission dict, or submission id and subverse.
   
 
 ####Dictionary Methods  
@@ -166,8 +169,14 @@ Intended to be used primarily with filter(), VAPy filter methods accept voat con
   
 &nbsp;&nbsp;&nbsp;&nbsp;`links = [vapy.get_links(d) for d in filter(is_url_submission, itr_of_dicts)]`
 
-**contains_regex(**voat_dict, ignore_links=False**)**  
-&nbsp;&nbsp;&nbsp;&nbsp; **True** if regex in title or content or link of submission or content of comment, **False** if not. If ignore_links == True, link submissions always return **False**.
+**contains_regex(**regex, voat_dict, ignore_links=False**)**  
+&nbsp;&nbsp;&nbsp;&nbsp; **True** if regex in title, content or link if submission dict, or content if comment dict, **False** if not. If ignore_links == True, link urls are not searched.  
+
+**contains_regex_in_content(**regex, submission_dict, ignore_links=False**)**  
+&nbsp;&nbsp;&nbsp;&nbsp; **True** if regex in content or link url of submission, **False** if not. If ignore_links == True, link submission dicts *always* return False.
+
+**contains_regex_in_title(**regex, submission_dict**)**  
+&nbsp;&nbsp;&nbsp;&nbsp; **True** if regex in title of submission, **False** if not.
 
 **is_submission(**voat_dict**)**  
 &nbsp;&nbsp;&nbsp;&nbsp; **True** if submission, **False** if comment.
