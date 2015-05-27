@@ -9,6 +9,7 @@
 1. [About](#about)  
 2. [Getting Started](#getting-started)  
 2.1. [Initializing VAPy](#initializing-vapy)  
+2.2. [Getting Content](#getting-content)  
 3. [VAPy Methods](#vapy-methods)  
 3.1. [Voat Content Dictionaries](#voat-content-dictionaries)  
 3.2. [Dictionary Methods](#dictionary-methods)  
@@ -27,7 +28,7 @@
 
 VAPy is intended to provide a simple, highly explicit Python interface to the Voat API.  
 
-While Python wrappers for other APIs are typically centered around Submission and Comment classes, VAPy encourages a somewhat more functional approach and consists largely of simple functions and methods designed to make it easier for users to chain those functions together in meaningful ways.
+While Python wrappers for other APIs are typically centered around Submission and Comment classes, VAPy encourages a somewhat more functional approach and consists largely of simple functions and  designed to be chained together or used with filter() to produce useful behavior.
 
 VAPy provides a Profiles class, which can be run as a standalone application providing a simple user agent and API key management system. Profiles can be used with VAPy applications, providing secure local persistence and renewal for API tokens. This gives users a "setup and ignore" approach to OAuth2 authentication. Profiles encrypts the voat username, API key, and API token with the Voat password. The Voat password is not stored in the database. Profiles uses [SQLite3](https://www.sqlite.org/) and [simplecrypt](https://github.com/andrewcooke/simple-crypt).
 
@@ -43,7 +44,9 @@ It is recommended that you first create a profile by running Profiles as a stand
 
 `$ python3 Profiles.py`  
 
-Select "add" and provide a profile name, Voat login credentials, and API key when prompted. That's all there is to it.  
+Select "add" and provide a profile name, Voat login credentials, and API key when prompted. Creating a profile will simplify proper initialization of a VAPy instance, but this step is optional.  
+
+
 
 After creating a profile, VAPy can handle OAuth2 authentication with the Voat API. Voat usernames and API keys and tokens are encrytped in a locally persistent database. As a Voat password is required for Voat API token generation, that same Voat password is used as the encryption passphrase to eliminate the need for two passwords per profile. Voat passwords are not stored within the local database.  
 
@@ -65,7 +68,14 @@ VAPy can be used without the Profiles component by directly calling the `set_hea
 
 After setting the headers attribute, VAPy functions will work regardless of the use of Profiles.  
   
-*Where does Profiles store information on my computer?*  
+#####Getting Content
+
+
+
+
+*Where does VAPy store information on my computer?*  
+
+Both of the VAPy persistence services, Profiles and Records, create SQLite databases in the following locations by default:
 
 |Operating System|Directory|  
 |:-:|:-:|  
