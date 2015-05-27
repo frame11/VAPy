@@ -88,9 +88,9 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 ```  
 
 **get_subverse(**subverse**)**  
-&nbsp;&nbsp;&nbsp;&nbsp;Returns a dictionary of {submission_dict: [comment_dicts],...}
+&nbsp;&nbsp;&nbsp;&nbsp;Returns a list of [(submission_dict, [comment_dicts]), ...]
 
-**get_submission_by_id(**submissionID**)**  
+**get_submission_by_id(**subverse, submissionID**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a submission dictionary.
 
 **get_submissions(**subverse**)**  
@@ -105,8 +105,8 @@ Most VAPy functions take a voat content dicitonary as an argument. This is the P
 **get_comment_by_id(**commentID**)**  
 &nbsp;&nbsp;&nbsp;&nbsp;Returns a submission dictionary.
 
-**get_comments_by_submission(**submissionID**)**  
-&nbsp;&nbsp;&nbsp;&nbsp;Returns a list comments dictionaries.
+**get_comments_by_submission(**submission, subverse=None**)**  
+&nbsp;&nbsp;&nbsp;&nbsp;Returns a list comments dictionaries. Accepts a submission dict, or submission id and subverse.
   
 
 ####Dictionary Methods  
