@@ -287,18 +287,8 @@ class VAPy:
             else:
                 return voat_dict['content']
 
-    '''
-    @catch_empty_input
     def get_subverse_name(self, voat_dict):
-        if self.is_submission(voat_dict):        
-            return voat_dict['subverse']
-        else:
-            submission_id = self.get_comment_submission(voat_dict)
-            return self.get_subverse_name(self.get_submission
-            #return self.get_subverse(self.submission_from_id(submission_id))
-
-            return self.get_submission_by_id(submission_id)['subverse']
-    '''
+        return voat_dict['subverse']
 
     def get_author(self, voat_dict):
         return voat_dict['userName']
@@ -314,18 +304,13 @@ class VAPy:
         # split used to remove partial seconds
         return datetime.strptime(voat_dict['date'].split(".")[0], "%Y-%m-%dT%H:%M:%S")
 
-
-        return voat_dict['date']
-
-    @catch_empty_input
     def get_id(self, voat_dict):
         return voat_dict['id']
 
-    @catch_empty_input
     def get_permalink(self, voat_dict):
         if self.is_submission(voat_dict):
             return "https://fakevout.azurewebsites.net/v/{}/comments/{}".format(
-                    self.get_subverse(voat_dict), self.get_id(voat_dict))
+                    self.get_subverse_name(voat_dict), self.get_id(voat_dict))
 
     # SUBMISSION DICT FUNCS
 
