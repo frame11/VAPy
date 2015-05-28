@@ -1,4 +1,4 @@
-import re, requests
+import datetime, re, requests
 from functools import wraps
 try:
         import ujson as json
@@ -15,7 +15,7 @@ TOKEN_URL = 'https://fakevout.azurewebsites.net/api/token'
 class VAPy:
     
     def __init__(self):
-        pass
+        self.headers = {}
 
     # HELPER FUNCTIONS
 
@@ -54,10 +54,9 @@ class VAPy:
         @wraps(func)
         def wrapper(self, *args, **kwargs):
             try:
-                result = func(self, *args, **kwargs)
-                return result if type(result) != None else {}
+                return func(self, *args, **kwargs)
             except (KeyError, TypeError):
-                return {}
+                return None
         return wrapper
     
     def catch_empty_filter_input(func):
@@ -75,7 +74,7 @@ class VAPy:
             if self.is_submission(inp):
                 return func(self, inp)
             else:
-                raise ValueError('You are calling a submission-only method on something that is not a submission')
+                raise ValueError('{} requires a submission dict as an argument.'.format(func.__name__))
         return wrapper
 
     def check_input_is_comment(func):
@@ -84,7 +83,7 @@ class VAPy:
             if self.is_comment(inp):
                 return func(self, inp)
             else:
-                raise ValueError('You are calling comment-only methods on something that is not a comment')
+                raise ValueError('{} requires a comment dic'.format(func.__name__))
         return wrapper
 
     def check_response(func):
@@ -132,11 +131,11 @@ class VAPy:
     
     @check_response
     def get_comments_by_submission(self, submission, subverse=None):
+        #url = ""
         if type(submission) == int:
             url = API_URL + 'v/{}/{}/comments'.format(subverse, submission)
         elif type(submission) == dict:
-            url = API_URL + 'v/{}/{}/comments'.format(
-                    self.get_subverse_name(submission), self.get_id(submission))
+            url = API_URL + 'v/{}/{}/comments'.format(self.get_subverse_name(submission), self.get_id(submission))
         r = requests.get(url, headers=self.headers)
         resp = json.loads(r.content)
         r.connection.close()
@@ -279,45 +278,43 @@ class VAPy:
 
     # VOAT DICT FUNCS
     
-    @catch_empty_input
     def get_content(self, voat_dict, ignore_links=False):
-        if (voat_dict != {}) and (ignore_links == True):
+        if ignore_links == True:
             return voat_dict['content']
-        elif (voat_dict != {}) and (ignore_links == False):
+        elif ignore_links == False:
             if self.is_url_submission(voat_dict):
                 return voat_dict['url']
             else:
                 return voat_dict['content']
-        else:
-            return {}
 
+    '''
     @catch_empty_input
     def get_subverse_name(self, voat_dict):
         if self.is_submission(voat_dict):        
             return voat_dict['subverse']
         else:
             submission_id = self.get_comment_submission(voat_dict)
+            return self.get_subverse_name(self.get_submission
             #return self.get_subverse(self.submission_from_id(submission_id))
-            return self.get_submission_by_id(submission_id)['subverse']
 
-    @catch_empty_input
+            return self.get_submission_by_id(submission_id)['subverse']
+    '''
+
     def get_author(self, voat_dict):
         return voat_dict['userName']
 
-    @catch_empty_input
     def get_scores(self, voat_dict):
         return voat_dict['upVotes'], voat_dict['downVotes']
 
-    @catch_empty_input
     def get_score(self, voat_dict):
-        if voat_dict != {}:
-            up, down = self.get_scores(voat_dict)
-            return up - down
-        else:
-            return {}
+        up, down = self.get_scores(voat_dict)
+        return up - down
 
-    @catch_empty_input
     def get_date(self, voat_dict):
+        # split used to remove partial seconds
+        return datetime.strptime(voat_dict['date'].split(".")[0], "%Y-%m-%dT%H:%M:%S")
+
+
         return voat_dict['date']
 
     @catch_empty_input
@@ -332,7 +329,7 @@ class VAPy:
 
     # SUBMISSION DICT FUNCS
 
-    @catch_empty_input
+    @check_input_is_submission
     def get_submission_type(self, submission_dict):
         return 'content' if submission_dict['type'] == 1 else 'url'
 
